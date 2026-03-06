@@ -508,24 +508,18 @@
   <p>The Soccer Carpool Game</p>
 </header>
 
-<!-- Firebase config warning -->
 <div id="config-warning">
   <strong>⚠️ Firebase Setup Required</strong>
   This game needs a free Firebase project to sync players across devices.<br>
   See setup instructions at the bottom of the page source, or ask your developer to configure it.
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     HOME SCREEN
-════════════════════════════════════════════════════════════ -->
 <div id="home-screen" class="screen show">
   <div class="box" style="max-width:400px; width:100%; margin-bottom:14px;">
     <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:6px;">Who's playing? 🎉</h2>
     <p style="font-size:0.85rem; color:#a0b4d0; margin-bottom:16px;">Multiplayer — everyone uses their own device!</p>
-
     <label class="name-label">Your Name</label>
     <input id="my-name" class="name-input" type="text" placeholder="Enter your name" maxlength="16" autocomplete="off" />
-
     <button class="btn btn-primary" onclick="createGame()">🎮 Create New Game</button>
     <div class="divider">or join existing game</div>
     <div class="join-row">
@@ -533,7 +527,6 @@
       <button class="btn btn-secondary" onclick="joinGame()" style="width:auto; padding:14px 20px; margin-bottom:0; flex-shrink:0;">Join →</button>
     </div>
   </div>
-
   <div class="instructions-box">
     <h3>📋 How to Play</h3>
     <ol>
@@ -549,21 +542,16 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     LOBBY SCREEN
-════════════════════════════════════════════════════════════ -->
 <div id="lobby-screen" class="screen">
   <div class="room-code-box">
     <div class="room-code-label">Share this code to join</div>
     <div class="room-code-big" id="lobby-code">----</div>
     <button class="btn-copy" onclick="copyRoomLink()">📋 Copy Invite Link</button>
   </div>
-
   <div class="player-list-box">
     <div class="player-list-title">Players in lobby</div>
     <div class="player-list" id="lobby-player-list"></div>
   </div>
-
   <div style="width:100%; max-width:400px;">
     <div id="host-start-area" style="display:none;">
       <button class="btn btn-primary" onclick="hostStartGame()">Start Game ⚽ (<span id="player-count">1</span> players)</button>
@@ -575,17 +563,11 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     GAME SCREEN
-════════════════════════════════════════════════════════════ -->
 <div id="game-screen" class="screen">
-
   <div class="mini-scores" id="mini-scores"></div>
-
   <div class="progress-bar-wrap">
     <div class="progress-bar-fill" id="progress-bar"></div>
   </div>
-
   <div class="card" id="question-card">
     <div class="card-header">
       <span class="category-badge" id="category-badge">Soccer</span>
@@ -603,29 +585,21 @@
       </button>
     </div>
   </div>
-
-  <!-- Shown after this player answers, while waiting for others -->
   <div class="waiting-panel" id="waiting-panel">
     <div class="w-emoji">⏳</div>
     <div class="w-title">Answer locked in!</div>
     <div class="w-sub">Waiting for everyone else…</div>
     <div class="answered-chips" id="answered-chips"></div>
   </div>
-
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     ROUND RESULTS SCREEN
-════════════════════════════════════════════════════════════ -->
 <div id="results-screen" class="screen">
   <div class="results-header">
     <div class="r-emoji" id="r-emoji">⚡</div>
     <div class="r-title" id="r-title">Results!</div>
     <div class="r-sub" id="r-sub"></div>
   </div>
-
   <div class="results-list" id="results-list"></div>
-
   <div style="width:100%; max-width:400px; margin-top:4px;">
     <div id="host-next-area" style="display:none;">
       <button class="btn btn-primary" onclick="hostNextQuestion()">Next Question ➡️</button>
@@ -636,9 +610,6 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     GAME OVER SCREEN
-════════════════════════════════════════════════════════════ -->
 <div id="gameover-screen" class="screen">
   <div class="trophy">🏆</div>
   <h2 id="winner-text">Winner!</h2>
@@ -652,7 +623,6 @@
   </div>
 </div>
 
-<!-- Dancing emoji overlay -->
 <div id="dance-overlay">
   <div class="confetti-bg"></div>
   <div class="dance-burst">
@@ -661,31 +631,12 @@
   </div>
 </div>
 
-<!-- Toast notification -->
 <div id="toast"></div>
 
-<!-- ══════════════════════════════════════════════════════════
-     FIREBASE SDKs
-     (loaded from CDN — no install needed)
-════════════════════════════════════════════════════════════ -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
-// ════════════════════════════════════════════════════════════
-// FIREBASE CONFIGURATION
-// ────────────────────────────────────────────────────────────
-// SETUP INSTRUCTIONS (one-time, free):
-//   1. Go to https://console.firebase.google.com
-//   2. Click "Add project" → name it anything → continue
-//   3. In the left sidebar click "Build" → "Realtime Database"
-//   4. Click "Create database" → choose a region → start in TEST mode
-//   5. Click the gear icon (Project settings) → scroll to "Your apps"
-//   6. Click "</>" (Web) → register app → copy the firebaseConfig below
-//   7. In Realtime Database → Rules tab, paste:
-//      { "rules": { "rooms": { "$r": { ".read": true, ".write": true } } } }
-//      and click Publish
-// ════════════════════════════════════════════════════════════
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyBSz8VmAkO5nX1wjphBvt9iKzqGU6HXMt4",
   authDomain:        "fc-stars-game.firebaseapp.com",
@@ -696,7 +647,6 @@ const FIREBASE_CONFIG = {
   appId:             "1:748946205490:web:74709ae800ec916d71852b"
 };
 
-// ─── Detect unconfigured state ───────────────────────────────
 const CONFIGURED = !FIREBASE_CONFIG.apiKey.startsWith('YOUR_');
 if (!CONFIGURED) {
   document.getElementById('config-warning').style.display = 'block';
@@ -706,13 +656,9 @@ let db;
 try {
   firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.database();
-} catch(e) { /* handled below */ }
+} catch(e) {}
 
-// ════════════════════════════════════════════════════════════
-// QUESTION DATA
-// ════════════════════════════════════════════════════════════
 const ALL_QUESTIONS = [
-  // ⚽ SOCCER
   { cat:"soccer", q:"Would you rather...", a:"Score the winning goal in the World Cup final", b:"Make the perfect assist that leads to the winning goal" },
   { cat:"soccer", q:"Would you rather...", a:"Play for your favorite club team forever", b:"Represent your country in every international tournament" },
   { cat:"soccer", q:"Would you rather...", a:"Have a rocket-powered shot", b:"Have perfect dribbling that no one can stop" },
@@ -728,7 +674,6 @@ const ALL_QUESTIONS = [
   { cat:"soccer", q:"Would you rather...", a:"Score off a bicycle kick", b:"Score off an incredible volley" },
   { cat:"soccer", q:"Would you rather...", a:"Be superfast but can't shoot", b:"Have a perfect shot but be slow" },
   { cat:"soccer", q:"Would you rather...", a:"Play in the Olympics", b:"Play in the World Cup" },
-  // 😂 FUNNY
   { cat:"funny", q:"Would you rather...", a:"Have to sing the national anthem before every soccer practice", b:"Have to do a cartwheel every time you score a goal" },
   { cat:"funny", q:"Would you rather...", a:"Wear your soccer jersey to school every single day for a year", b:"Carry a soccer ball everywhere you go for a month" },
   { cat:"funny", q:"Would you rather...", a:"Have a coach who speaks only in rhymes", b:"Have a referee who dances after every call" },
@@ -737,7 +682,6 @@ const ALL_QUESTIONS = [
   { cat:"funny", q:"Would you rather...", a:"Play soccer in a giant hamster ball", b:"Play soccer on a giant trampoline" },
   { cat:"funny", q:"Would you rather...", a:"Have a team mascot that follows you everywhere", b:"Have your team play with a square ball" },
   { cat:"funny", q:"Would you rather...", a:"Celebrate every goal with the worm dance", b:"Celebrate every goal with a dramatic fall to the ground" },
-  // 🌸 LIFE
   { cat:"life", q:"Would you rather...", a:"Have a sleepover every weekend with your best friend", b:"Go on one amazing vacation every year with your family" },
   { cat:"life", q:"Would you rather...", a:"Only eat your favorite food for a month", b:"Try a new food every single day for a month" },
   { cat:"life", q:"Would you rather...", a:"Have a pet dog", b:"Have a pet cat" },
@@ -749,7 +693,6 @@ const ALL_QUESTIONS = [
   { cat:"life", q:"Would you rather...", a:"Have a superpower you can never tell anyone about", b:"Be famous but have no superpower" },
   { cat:"life", q:"Would you rather...", a:"Always have the perfect weather", b:"Never have to worry about your hair" },
   { cat:"life", q:"Would you rather...", a:"Skip school for a week to travel somewhere cool", b:"Stay home for a week with unlimited movies and snacks" },
-  // 💪 TOUGH CHOICE
   { cat:"tough", q:"Would you rather...", a:"Be really good at soccer but have a tough coach", b:"Be okay at soccer but have the most fun coach ever" },
   { cat:"tough", q:"Would you rather...", a:"Give up your phone for a month", b:"Give up your favorite sport for a month" },
   { cat:"tough", q:"Would you rather...", a:"Always be the best player on a losing team", b:"Always be the weakest player on a winning team" },
@@ -764,34 +707,23 @@ const PLAYER_COLORS = ['#f72585','#4cc9f0','#06d6a0','#ffd166','#b5179e','#4361e
 const TOTAL = 10;
 const DANCE_EMOJIS = ['💃','🕺','🎉','✨','🌟','🔥'];
 
-// ════════════════════════════════════════════════════════════
-// LOCAL STATE
-// ════════════════════════════════════════════════════════════
 let myId       = sessionStorage.getItem('playerId') || genId();
 let myName     = '';
 let roomCode   = '';
 let isHost     = false;
 let hasAnswered = false;
 let roomRef    = null;
-let unsubscribe = null;  // cleanup function for Firebase listener
 let danceTimer = null;
 
 sessionStorage.setItem('playerId', myId);
 
-// ════════════════════════════════════════════════════════════
-// UTILITY HELPERS
-// ════════════════════════════════════════════════════════════
-function genId() {
-  return Math.random().toString(36).slice(2, 10);
-}
-
+function genId() { return Math.random().toString(36).slice(2, 10); }
 function genRoomCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
   let code = '';
   for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
   return code;
 }
-
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -800,23 +732,17 @@ function shuffle(arr) {
   }
   return a;
 }
-
-function playerColor(index) {
-  return PLAYER_COLORS[index % PLAYER_COLORS.length];
-}
-
+function playerColor(index) { return PLAYER_COLORS[index % PLAYER_COLORS.length]; }
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
   document.getElementById(id).classList.add('show');
 }
-
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
-
 function celebrateDance(label) {
   const overlay = document.getElementById('dance-overlay');
   document.getElementById('dance-emoji').textContent = DANCE_EMOJIS[Math.floor(Math.random() * DANCE_EMOJIS.length)];
@@ -828,9 +754,6 @@ function celebrateDance(label) {
   danceTimer = setTimeout(() => overlay.classList.remove('show'), 1150);
 }
 
-// ════════════════════════════════════════════════════════════
-// HOME SCREEN ACTIONS
-// ════════════════════════════════════════════════════════════
 function getMyName() {
   const n = document.getElementById('my-name').value.trim();
   if (!n) { showToast('Please enter your name first!'); return null; }
@@ -844,22 +767,13 @@ async function createGame() {
   myName = name;
   isHost = true;
   roomCode = genRoomCode();
-
   const questionOrder = shuffle([...Array(ALL_QUESTIONS.length).keys()]).slice(0, TOTAL);
-
   await db.ref(`rooms/${roomCode}`).set({
-    hostId: myId,
-    status: 'lobby',
-    currentQ: 0,
-    questionOrder,
+    hostId: myId, status: 'lobby', currentQ: 0, questionOrder,
     createdAt: Date.now(),
-    players: {
-      [myId]: { name: myName, score: 0, online: true, joinedAt: Date.now() }
-    }
+    players: { [myId]: { name: myName, score: 0, online: true, joinedAt: Date.now() } }
   });
-
   db.ref(`rooms/${roomCode}/players/${myId}/online`).onDisconnect().set(false);
-
   enterLobby();
 }
 
@@ -869,28 +783,16 @@ async function joinGame() {
   if (!name) return;
   const code = document.getElementById('join-code').value.trim().toUpperCase();
   if (code.length !== 4) { showToast('Enter the 4-letter room code'); return; }
-
   const snap = await db.ref(`rooms/${code}`).once('value');
   if (!snap.exists()) { showToast('Room not found — check the code!'); return; }
   const room = snap.val();
   if (room.status !== 'lobby') { showToast('That game has already started!'); return; }
-
-  myName = name;
-  isHost = false;
-  roomCode = code;
-
-  await db.ref(`rooms/${roomCode}/players/${myId}`).set({
-    name: myName, score: 0, online: true, joinedAt: Date.now()
-  });
-
+  myName = name; isHost = false; roomCode = code;
+  await db.ref(`rooms/${roomCode}/players/${myId}`).set({ name: myName, score: 0, online: true, joinedAt: Date.now() });
   db.ref(`rooms/${roomCode}/players/${myId}/online`).onDisconnect().set(false);
-
   enterLobby();
 }
 
-// ════════════════════════════════════════════════════════════
-// LOBBY
-// ════════════════════════════════════════════════════════════
 function enterLobby() {
   document.getElementById('lobby-code').textContent = roomCode;
   document.getElementById('host-start-area').style.display = isHost ? 'block' : 'none';
@@ -901,56 +803,39 @@ function enterLobby() {
 
 function copyRoomLink() {
   const url = `${location.origin}${location.pathname}?room=${roomCode}`;
-  navigator.clipboard.writeText(url).then(() => showToast('Invite link copied!')).catch(() => {
-    showToast(`Room code: ${roomCode}`);
-  });
+  navigator.clipboard.writeText(url).then(() => showToast('Invite link copied!')).catch(() => showToast(`Room code: ${roomCode}`));
 }
 
 function hostStartGame() {
-  const playerCount = document.getElementById('player-count');
-  const count = parseInt(playerCount.textContent);
+  const count = parseInt(document.getElementById('player-count').textContent);
   if (count < 2) { showToast('Need at least 2 players!'); return; }
   db.ref(`rooms/${roomCode}/status`).set('question');
 }
 
-// ════════════════════════════════════════════════════════════
-// MAIN ROOM LISTENER
-// Watches the entire room for status changes and player updates
-// ════════════════════════════════════════════════════════════
 function listenToRoom() {
   if (roomRef) roomRef.off();
   roomRef = db.ref(`rooms/${roomCode}`);
-
   roomRef.on('value', snap => {
     if (!snap.exists()) return;
     const room = snap.val();
-
-    // Always update lobby player list while in lobby
     if (document.getElementById('lobby-screen').classList.contains('show')) {
       renderLobbyPlayers(room.players || {});
     }
-
     switch (room.status) {
-      case 'lobby':
-        break;
-
+      case 'lobby': break;
       case 'question':
-        if (!document.getElementById('game-screen').classList.contains('show')) {
-          showScreen('game-screen');
-        }
+        if (!document.getElementById('game-screen').classList.contains('show')) showScreen('game-screen');
         renderQuestion(room);
         renderAnswerWaiting(room);
         renderMiniScores(room.players || {});
         checkAllAnswered(room);
         break;
-
       case 'results':
         if (!document.getElementById('results-screen').classList.contains('show')) {
           showScreen('results-screen');
           renderResults(room);
         }
         break;
-
       case 'gameover':
         showScreen('gameover-screen');
         renderGameOver(room.players || {});
@@ -959,15 +844,10 @@ function listenToRoom() {
   });
 }
 
-// ════════════════════════════════════════════════════════════
-// LOBBY RENDERING
-// ════════════════════════════════════════════════════════════
 function renderLobbyPlayers(players) {
   const list = document.getElementById('lobby-player-list');
   const entries = Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt);
-
   document.getElementById('player-count').textContent = entries.length;
-
   list.innerHTML = entries.map(([id, p], i) => `
     <div class="player-item">
       <div class="player-dot" style="background:${playerColor(i)}"></div>
@@ -977,41 +857,27 @@ function renderLobbyPlayers(players) {
       <span class="host-badge" style="display:${entries[0][0] === id ? 'inline' : 'none'}">Host</span>
     </div>
   `).join('');
-
-  // Enable start button only if ≥2 players
-  const startBtn = document.getElementById('btn-host-start');
-  if (startBtn) startBtn.disabled = entries.length < 2;
 }
 
-// ════════════════════════════════════════════════════════════
-// GAME SCREEN RENDERING
-// ════════════════════════════════════════════════════════════
 function renderQuestion(room) {
   const qIndex = room.questionOrder[room.currentQ];
   const q = ALL_QUESTIONS[qIndex];
-
-  // Only re-render question if it changed (avoid flicker while answers update)
   const numEl = document.getElementById('question-number');
   if (numEl.textContent === `Q${room.currentQ + 1} / ${TOTAL}`) return;
-
   hasAnswered = false;
   document.getElementById('waiting-panel').classList.remove('show');
   document.getElementById('btn-a').classList.remove('selected');
   document.getElementById('btn-b').classList.remove('selected');
   document.getElementById('btn-a').disabled = false;
   document.getElementById('btn-b').disabled = false;
-
   const badge = document.getElementById('category-badge');
   badge.textContent = CAT_LABELS[q.cat];
   badge.className = 'category-badge ' + q.cat;
-
   numEl.textContent = `Q${room.currentQ + 1} / ${TOTAL}`;
   document.getElementById('question-text').textContent = q.q;
   document.getElementById('option-a-text').textContent = q.a;
   document.getElementById('option-b-text').textContent = q.b;
-
-  const pct = (room.currentQ / TOTAL) * 100;
-  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-bar').style.width = (room.currentQ / TOTAL * 100) + '%';
 }
 
 function renderMiniScores(players) {
@@ -1031,29 +897,18 @@ function renderAnswerWaiting(room) {
   const players = room.players || {};
   const answers = room.answers || {};
   const onlinePlayers = Object.entries(players).filter(([,p]) => p.online !== false);
-
-  const chips = document.getElementById('answered-chips');
-  chips.innerHTML = onlinePlayers
+  document.getElementById('answered-chips').innerHTML = onlinePlayers
     .sort((a, b) => a[1].joinedAt - b[1].joinedAt)
-    .map(([id, p]) => `
-      <span class="answered-chip ${answers[id] ? '' : 'pending'}">
-        ${answers[id] ? '✓' : '…'} ${p.name}
-      </span>
-    `).join('');
+    .map(([id, p]) => `<span class="answered-chip ${answers[id] ? '' : 'pending'}">${answers[id] ? '✓' : '…'} ${p.name}</span>`).join('');
 }
 
-// ════════════════════════════════════════════════════════════
-// ANSWERING
-// ════════════════════════════════════════════════════════════
 async function submitAnswer(option) {
   if (hasAnswered) return;
   hasAnswered = true;
-
   document.getElementById(`btn-${option.toLowerCase()}`).classList.add('selected');
   document.getElementById('btn-a').disabled = true;
   document.getElementById('btn-b').disabled = true;
   document.getElementById('waiting-panel').classList.add('show');
-
   await db.ref(`rooms/${roomCode}/answers/${myId}`).set(option);
 }
 
@@ -1063,15 +918,11 @@ function checkAllAnswered(room) {
   const answers = room.answers || {};
   const onlinePlayers = Object.keys(players).filter(id => players[id].online !== false);
   const answeredCount = onlinePlayers.filter(id => answers[id]).length;
-
   if (answeredCount >= onlinePlayers.length && onlinePlayers.length >= 1) {
-    // All answered — compute scores and transition to results
-    // Any client can do this; Firebase set is idempotent
     const scoreUpdates = computeScores(players, answers);
     const updates = {};
     for (const [id, pts] of Object.entries(scoreUpdates)) {
-      updates[`rooms/${roomCode}/players/${id}/score`] =
-        (players[id].score || 0) + pts;
+      updates[`rooms/${roomCode}/players/${id}/score`] = (players[id].score || 0) + pts;
     }
     updates[`rooms/${roomCode}/status`] = 'results';
     db.ref().update(updates);
@@ -1082,154 +933,99 @@ function computeScores(players, answers) {
   const onlineIds = Object.keys(players).filter(id => players[id].online !== false);
   const countA = onlineIds.filter(id => answers[id] === 'A').length;
   const countB = onlineIds.filter(id => answers[id] === 'B').length;
-
   const pts = {};
   onlineIds.forEach(id => { pts[id] = 0; });
-
-  if (countA === 0 || countB === 0) {
-    // Everyone agreed — no points
-    return pts;
-  }
-  if (countA === countB) {
-    // Perfect tie — everyone gets a point
-    onlineIds.forEach(id => { pts[id] = 1; });
-  } else {
-    // Minority wins
+  if (countA === 0 || countB === 0) return pts;
+  if (countA === countB) { onlineIds.forEach(id => { pts[id] = 1; }); }
+  else {
     const minorityAnswer = countA < countB ? 'A' : 'B';
     onlineIds.filter(id => answers[id] === minorityAnswer).forEach(id => { pts[id] = 1; });
   }
   return pts;
 }
 
-// ════════════════════════════════════════════════════════════
-// ROUND RESULTS
-// ════════════════════════════════════════════════════════════
 function renderResults(room) {
   const players = room.players || {};
-  const answers = room.answers  || {};
-  const qIndex  = room.questionOrder[room.currentQ];
-  const q = ALL_QUESTIONS[qIndex];
-
+  const answers = room.answers || {};
+  const q = ALL_QUESTIONS[room.questionOrder[room.currentQ]];
   const onlineIds = Object.keys(players).filter(id => players[id].online !== false);
   const countA = onlineIds.filter(id => answers[id] === 'A').length;
   const countB = onlineIds.filter(id => answers[id] === 'B').length;
-
-  let rEmoji, rTitle, rSub;
   const scorePts = computeScores(players, answers);
   const anyPoints = Object.values(scorePts).some(p => p > 0);
-
-  if (countA === 0 || countB === 0) {
-    rEmoji = '🤝'; rTitle = 'Everyone agreed!';
-    rSub = 'No bold choices this round — no points scored.';
-  } else if (countA === countB) {
-    rEmoji = '⚖️'; rTitle = "It's a tie!";
-    rSub = 'Perfect split — everyone earns a point!';
-  } else {
+  let rEmoji, rTitle, rSub;
+  if (countA === 0 || countB === 0) { rEmoji = '🤝'; rTitle = 'Everyone agreed!'; rSub = 'No bold choices this round — no points scored.'; }
+  else if (countA === countB) { rEmoji = '⚖️'; rTitle = "It's a tie!"; rSub = 'Perfect split — everyone earns a point!'; }
+  else {
     const minority = countA < countB ? 'A' : 'B';
     const minorityText = minority === 'A' ? q.a : q.b;
     rEmoji = '⚡'; rTitle = 'Minority wins!';
     rSub = `The bold choice: "${minorityText.substring(0, 50)}${minorityText.length > 50 ? '…' : ''}"`;
   }
-
   document.getElementById('r-emoji').textContent = rEmoji;
   document.getElementById('r-title').textContent = rTitle;
-  document.getElementById('r-sub').textContent   = rSub;
-
-  const entries = onlineIds
-    .map((id, _) => ({ id, p: players[id], ans: answers[id], pt: scorePts[id] || 0 }))
-    .sort((a, b) => a.p.joinedAt - b.p.joinedAt);
-
+  document.getElementById('r-sub').textContent = rSub;
   const colorMap = {};
-  Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt)
-    .forEach(([id], i) => { colorMap[id] = playerColor(i); });
-
+  Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt).forEach(([id], i) => { colorMap[id] = playerColor(i); });
+  const entries = onlineIds.map(id => ({ id, p: players[id], ans: answers[id], pt: scorePts[id] || 0 })).sort((a, b) => a.p.joinedAt - b.p.joinedAt);
   document.getElementById('results-list').innerHTML = entries.map(e => `
     <div class="result-row ${e.pt > 0 ? 'got-point' : ''}">
       <div class="result-dot" style="background:${colorMap[e.id]}"></div>
       <span class="result-name">${e.p.name}${e.id === myId ? ' (you)' : ''}</span>
-      <span class="result-answer-badge ${e.ans === 'A' ? 'a-badge' : 'b-badge'}">
-        ${e.ans === 'A' ? '🅰️' : '🅱️'}
-      </span>
+      <span class="result-answer-badge ${e.ans === 'A' ? 'a-badge' : 'b-badge'}">${e.ans === 'A' ? '🅰️' : '🅱️'}</span>
       ${e.pt > 0 ? '<span class="result-point-tag">+1 ⭐</span>' : ''}
     </div>
   `).join('');
-
   document.getElementById('host-next-area').style.display = isHost ? 'block' : 'none';
   document.getElementById('guest-next-area').style.display = isHost ? 'none' : 'block';
-
-  if (anyPoints) {
-    setTimeout(() => celebrateDance('Minority wins! +1 point ⭐'), 300);
-  }
+  if (anyPoints) setTimeout(() => celebrateDance('Minority wins! +1 point ⭐'), 300);
 }
 
 function hostNextQuestion() {
   db.ref(`rooms/${roomCode}`).once('value').then(snap => {
     const room = snap.val();
     const nextQ = (room.currentQ || 0) + 1;
-    if (nextQ >= TOTAL) {
-      db.ref(`rooms/${roomCode}/status`).set('gameover');
-    } else {
-      db.ref(`rooms/${roomCode}`).update({
-        currentQ: nextQ,
-        answers: null,
-        status: 'question'
-      });
-    }
+    if (nextQ >= TOTAL) { db.ref(`rooms/${roomCode}/status`).set('gameover'); }
+    else { db.ref(`rooms/${roomCode}`).update({ currentQ: nextQ, answers: null, status: 'question' }); }
   });
 }
 
-// ════════════════════════════════════════════════════════════
-// GAME OVER
-// ════════════════════════════════════════════════════════════
 function renderGameOver(players) {
-  const entries = Object.entries(players)
-    .sort((a, b) => b[1].score - a[1].score || a[1].joinedAt - b[1].joinedAt);
-
+  const entries = Object.entries(players).sort((a, b) => b[1].score - a[1].score || a[1].joinedAt - b[1].joinedAt);
   const colorMap = {};
-  Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt)
-    .forEach(([id], i) => { colorMap[id] = playerColor(i); });
-
+  Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt).forEach(([id], i) => { colorMap[id] = playerColor(i); });
   const rankEmojis = ['🥇','🥈','🥉'];
-  let rank = 1;
-  let prevScore = null;
-
+  let rank = 1, prevScore = null;
   document.getElementById('leaderboard').innerHTML = entries.map(([id, p], i) => {
     if (p.score !== prevScore) { rank = i + 1; prevScore = p.score; }
-    const isWinner = rank === 1;
     return `
-      <div class="lb-row ${isWinner ? 'lb-winner' : ''}">
+      <div class="lb-row ${rank === 1 ? 'lb-winner' : ''}">
         <span class="lb-rank">${rankEmojis[rank - 1] || rank}</span>
         <div class="lb-dot" style="background:${colorMap[id]}"></div>
         <span class="lb-name">${p.name}${id === myId ? ' (you)' : ''}</span>
         <span class="lb-score" style="color:${colorMap[id]}">${p.score}</span>
-      </div>
-    `;
+      </div>`;
   }).join('');
-
   const winner = entries[0];
   if (winner) {
     if (entries[0][1].score === entries[1]?.score) {
       document.getElementById('winner-text').textContent = "It's a Tie!";
-      document.getElementById('winner-sub').textContent  = "You all think alike!";
+      document.getElementById('winner-sub').textContent = "You all think alike!";
     } else {
       document.getElementById('winner-text').textContent = `${winner[1].name} wins! 🏆`;
-      document.getElementById('winner-sub').textContent  = "Most minority answers wins!";
+      document.getElementById('winner-sub').textContent = "Most minority answers wins!";
     }
   }
 }
 
 function restartToHome() {
   if (roomRef) { roomRef.off(); roomRef = null; }
-  // Clean up the room from Firebase if host
   if (isHost) db.ref(`rooms/${roomCode}`).remove();
   roomCode = ''; isHost = false; hasAnswered = false;
   document.getElementById('my-name').value = '';
   showScreen('home-screen');
 }
 
-// ════════════════════════════════════════════════════════════
-// URL-BASED AUTO-JOIN (share link: ?room=ABCD)
-// ════════════════════════════════════════════════════════════
 (function checkUrlRoom() {
   const params = new URLSearchParams(location.search);
   const roomParam = params.get('room');
@@ -1239,7 +1035,6 @@ function restartToHome() {
   }
 })();
 
-// Allow Enter key on name field to trigger create/join
 document.getElementById('my-name').addEventListener('keyup', e => {
   if (e.key === 'Enter') {
     const code = document.getElementById('join-code').value.trim();
@@ -1248,7 +1043,6 @@ document.getElementById('my-name').addEventListener('keyup', e => {
 });
 document.getElementById('join-code').addEventListener('keyup', e => {
   if (e.key === 'Enter') joinGame();
-  // Auto-uppercase
   e.target.value = e.target.value.toUpperCase();
 });
 </script>
