@@ -3,337 +3,185 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>⚽ Would You Rather?</title>
+  <title>⚽ Women's Soccer Trivia</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      color: white;
-      padding: 16px;
-      padding-bottom: 40px;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      color: white; padding: 16px; padding-bottom: 40px;
     }
-
-    header {
-      text-align: center;
-      margin-bottom: 16px;
-      padding-top: 12px;
-    }
+    header { text-align: center; margin-bottom: 16px; padding-top: 12px; }
     header h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: -0.5px; }
     header p  { font-size: 0.85rem; color: #a0b4d0; margin-top: 4px; }
-
-    /* ── Screen management ───────────────────────────────── */
     .screen { display: none; width: 100%; flex-direction: column; align-items: center; }
     .screen.show { display: flex; }
-
-    /* ── Shared form elements ────────────────────────────── */
     .box {
-      width: 100%;
-      max-width: 400px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 20px;
-      margin-bottom: 16px;
+      width: 100%; max-width: 400px;
+      background: rgba(255,255,255,0.06); border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.12); padding: 20px; margin-bottom: 16px;
     }
-
     .name-label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #a0b4d0;
-      display: block;
-      margin-bottom: 6px;
+      font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: #a0b4d0; display: block; margin-bottom: 6px;
     }
-
     .name-input {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.08);
-      border: 1.5px solid rgba(255,255,255,0.15);
-      color: white;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-      margin-bottom: 14px;
+      width: 100%; padding: 14px 16px; border-radius: 12px;
+      background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15);
+      color: white; font-size: 1rem; outline: none; transition: border-color 0.2s; margin-bottom: 14px;
     }
     .name-input::placeholder { color: #607080; }
     .name-input:focus { border-color: #f72585; }
-
     .btn {
-      width: 100%;
-      padding: 15px;
-      border-radius: 14px;
-      border: none;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.18s ease;
-      -webkit-tap-highlight-color: transparent;
-      margin-bottom: 10px;
+      width: 100%; padding: 15px; border-radius: 14px; border: none;
+      font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.18s ease;
+      -webkit-tap-highlight-color: transparent; margin-bottom: 10px;
     }
     .btn:active { transform: scale(0.97); }
     .btn:last-child { margin-bottom: 0; }
-
-    .btn-primary { background: linear-gradient(135deg, #f72585, #b5179e); color: white; }
+    .btn-primary   { background: linear-gradient(135deg, #f72585, #b5179e); color: white; }
     .btn-secondary { background: linear-gradient(135deg, #4cc9f0, #4361ee); color: white; }
-    .btn-ghost {
-      background: rgba(255,255,255,0.08);
-      color: #a0b4d0;
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-
+    .btn-ghost { background: rgba(255,255,255,0.08); color: #a0b4d0; border: 1px solid rgba(255,255,255,0.12); }
     .divider {
-      text-align: center;
-      color: #607080;
-      font-size: 0.82rem;
-      margin: 4px 0 12px;
-      position: relative;
+      text-align: center; color: #607080; font-size: 0.82rem; margin: 4px 0 12px; position: relative;
     }
     .divider::before, .divider::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 40%;
-      height: 1px;
-      background: rgba(255,255,255,0.1);
+      content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: rgba(255,255,255,0.1);
     }
-    .divider::before { left: 0; }
-    .divider::after  { right: 0; }
-
-    /* ── Home screen ─────────────────────────────────────── */
+    .divider::before { left: 0; } .divider::after { right: 0; }
     #home-screen { gap: 0; }
     #home-screen h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; }
     #home-screen > p { font-size: 0.88rem; color: #a0b4d0; margin-bottom: 16px; text-align: center; }
-
     .join-row { display: flex; gap: 10px; }
     .join-row .name-input { flex: 1; margin-bottom: 0; text-transform: uppercase; letter-spacing: 2px; text-align: center; font-weight: 700; }
     .join-row .btn { width: auto; padding: 14px 20px; margin-bottom: 0; flex-shrink: 0; }
-
-    /* ── Instructions box ────────────────────────────────── */
     .instructions-box {
-      width: 100%;
-      max-width: 400px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 18px;
-      margin-top: 4px;
+      width: 100%; max-width: 400px; background: rgba(255,255,255,0.06);
+      border-radius: 18px; border: 1px solid rgba(255,255,255,0.12); padding: 18px; margin-top: 4px;
     }
     .instructions-box h3 {
-      font-size: 0.95rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #ffd166;
-      margin-bottom: 12px;
+      font-size: 0.95rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: #ffd166; margin-bottom: 12px;
     }
     .instructions-box ol { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
     .instructions-box li { font-size: 0.88rem; color: #cdd9e8; line-height: 1.45; }
     .instructions-box li strong { color: #fff; }
     .scoring-note {
-      margin-top: 12px;
-      background: rgba(247,37,133,0.12);
-      border: 1px solid rgba(247,37,133,0.25);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.82rem;
-      color: #f9a8d0;
-      line-height: 1.4;
-      text-align: center;
+      margin-top: 12px; background: rgba(247,37,133,0.12); border: 1px solid rgba(247,37,133,0.25);
+      border-radius: 10px; padding: 10px 12px; font-size: 0.82rem; color: #f9a8d0;
+      line-height: 1.4; text-align: center;
     }
-
-    /* ── Lobby screen ────────────────────────────────────── */
+    /* Lobby */
     #lobby-screen { gap: 0; }
-
     .room-code-box {
-      width: 100%;
-      max-width: 400px;
-      background: rgba(255,209,102,0.1);
-      border: 1px solid rgba(255,209,102,0.4);
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 14px;
+      width: 100%; max-width: 400px; background: rgba(255,209,102,0.1);
+      border: 1px solid rgba(255,209,102,0.4); border-radius: 20px;
+      padding: 20px; text-align: center; margin-bottom: 14px;
     }
     .room-code-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: #ffd166; margin-bottom: 6px; }
     .room-code-big { font-size: 3.2rem; font-weight: 900; letter-spacing: 8px; color: #fff; line-height: 1; margin-bottom: 12px; }
     .btn-copy {
-      background: rgba(255,209,102,0.2);
-      border: 1px solid rgba(255,209,102,0.5);
-      color: #ffd166;
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 8px 18px;
-      border-radius: 20px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+      background: rgba(255,209,102,0.2); border: 1px solid rgba(255,209,102,0.5);
+      color: #ffd166; font-size: 0.82rem; font-weight: 700; padding: 8px 18px;
+      border-radius: 20px; cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
-
     .player-list-box {
-      width: 100%;
-      max-width: 400px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 16px;
-      margin-bottom: 14px;
+      width: 100%; max-width: 400px; background: rgba(255,255,255,0.06);
+      border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); padding: 16px; margin-bottom: 14px;
     }
     .player-list-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #a0b4d0; margin-bottom: 10px; }
     .player-list { display: flex; flex-direction: column; gap: 8px; }
     .player-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      background: rgba(255,255,255,0.05); border-radius: 10px; font-size: 0.9rem; font-weight: 600;
     }
-    .player-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .player-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .host-badge {
-      margin-left: auto;
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #ffd166;
-      background: rgba(255,209,102,0.15);
-      border: 1px solid rgba(255,209,102,0.3);
-      padding: 2px 8px;
-      border-radius: 10px;
+      margin-left: auto; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #ffd166; background: rgba(255,209,102,0.15);
+      border: 1px solid rgba(255,209,102,0.3); padding: 2px 8px; border-radius: 10px;
     }
-    .waiting-text {
-      text-align: center;
-      font-size: 0.88rem;
-      color: #a0b4d0;
-      padding: 8px 0;
-    }
-
-    /* ── Scoreboard (game screen) ────────────────────────── */
+    .waiting-text { text-align: center; font-size: 0.88rem; color: #a0b4d0; padding: 8px 0; }
+    /* Mini scores */
     .mini-scores {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 12px;
+      display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+      width: 100%; max-width: 400px; margin-bottom: 8px;
     }
     .mini-score-chip {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 5px 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 5px 10px;
+      font-size: 0.8rem; font-weight: 600;
     }
+    .mini-score-chip.eliminated { opacity: 0.35; text-decoration: line-through; }
     .mini-score-chip .chip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .mini-score-chip .chip-score { font-weight: 900; }
-
-    /* ── Progress bar ────────────────────────────────────── */
-    .progress-bar-wrap {
-      width: 100%;
-      max-width: 400px;
-      height: 5px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 10px;
-      margin-bottom: 14px;
-      overflow: hidden;
+    /* Round indicator */
+    .round-indicator {
+      width: 100%; max-width: 400px; display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 8px; font-size: 0.8rem; color: #a0b4d0; font-weight: 600;
     }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #f72585, #4cc9f0);
-      border-radius: 10px;
-      transition: width 0.4s ease;
+    .round-indicator .ri-round { color: #ffd166; font-weight: 800; }
+    /* Timer */
+    .timer-wrap {
+      width: 100%; max-width: 400px; display: flex; align-items: center;
+      gap: 10px; margin-bottom: 10px;
     }
-
-    /* ── Question card ───────────────────────────────────── */
+    .timer-number {
+      font-size: 1.6rem; font-weight: 900; min-width: 36px; text-align: center;
+      transition: color 0.3s;
+    }
+    .timer-number.urgent { color: #f72585; }
+    .timer-bar-outer {
+      flex: 1; height: 8px; background: rgba(255,255,255,0.1);
+      border-radius: 10px; overflow: hidden;
+    }
+    .timer-bar-inner {
+      height: 100%; width: 100%;
+      background: linear-gradient(90deg, #06d6a0, #4cc9f0);
+      border-radius: 10px; transition: width 0.15s linear, background 0.3s;
+    }
+    .timer-bar-inner.urgent { background: linear-gradient(90deg, #f72585, #ff6b35); }
+    /* Question card */
     .card {
-      width: 100%;
-      max-width: 400px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,0.12);
-      overflow: hidden;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      animation: fadeIn 0.3s ease;
+      width: 100%; max-width: 400px; background: rgba(255,255,255,0.06);
+      border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); overflow: hidden;
+      margin-bottom: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease;
     }
     .card-header {
-      padding: 14px 20px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 14px 20px 10px; display: flex; justify-content: space-between;
+      align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08);
     }
     .category-badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 4px 10px;
-      border-radius: 20px;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; padding: 4px 10px; border-radius: 20px;
+      background: rgba(76,201,240,0.2); color: #4cc9f0; border: 1px solid rgba(76,201,240,0.3);
     }
-    .category-badge.soccer { background: rgba(76,201,240,0.2); color: #4cc9f0; border: 1px solid rgba(76,201,240,0.3); }
-    .category-badge.funny  { background: rgba(255,209,102,0.2); color: #ffd166; border: 1px solid rgba(255,209,102,0.3); }
-    .category-badge.life   { background: rgba(247,37,133,0.2); color: #f72585; border: 1px solid rgba(247,37,133,0.3); }
-    .category-badge.tough  { background: rgba(6,214,160,0.2);  color: #06d6a0; border: 1px solid rgba(6,214,160,0.3); }
     .question-number { font-size: 0.78rem; color: #a0b4d0; }
     .question-text { padding: 20px 20px 16px; font-size: 1.05rem; font-weight: 700; line-height: 1.45; text-align: center; }
-
     .options { display: flex; flex-direction: column; gap: 10px; padding: 0 16px 20px; }
     .option-btn {
-      width: 100%;
-      padding: 16px;
-      border-radius: 14px;
-      border: 2px solid transparent;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.18s ease;
-      text-align: left;
-      line-height: 1.35;
-      -webkit-tap-highlight-color: transparent;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #fff;
+      width: 100%; padding: 14px 16px; border-radius: 14px; border: 2px solid transparent;
+      font-size: 0.93rem; font-weight: 600; cursor: pointer; transition: all 0.18s ease;
+      text-align: left; line-height: 1.35; -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: center; gap: 10px; color: #fff;
     }
     .option-btn:disabled { cursor: default; }
-    .option-btn .icon { font-size: 1.3rem; flex-shrink: 0; }
+    .option-btn .icon { font-size: 1.1rem; flex-shrink: 0; font-weight: 900; min-width: 22px; text-align: center; }
     .option-a { background: rgba(247,37,133,0.12); border-color: rgba(247,37,133,0.3); }
     .option-a.selected, .option-a:not(:disabled):active { background: rgba(247,37,133,0.35); border-color: #f72585; transform: scale(0.98); }
     .option-b { background: rgba(76,201,240,0.12); border-color: rgba(76,201,240,0.3); }
     .option-b.selected, .option-b:not(:disabled):active { background: rgba(76,201,240,0.35); border-color: #4cc9f0; transform: scale(0.98); }
-
-    /* ── Waiting panel (after answering) ─────────────────── */
+    .option-c { background: rgba(6,214,160,0.12); border-color: rgba(6,214,160,0.3); }
+    .option-c.selected, .option-c:not(:disabled):active { background: rgba(6,214,160,0.35); border-color: #06d6a0; transform: scale(0.98); }
+    .option-btn.correct-reveal { border-color: #ffd166 !important; background: rgba(255,209,102,0.2) !important; }
+    .option-btn.wrong-reveal { opacity: 0.45; }
+    /* Waiting panel */
     .waiting-panel {
-      display: none;
-      width: 100%;
-      max-width: 400px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 24px;
-      text-align: center;
-      margin-bottom: 14px;
+      display: none; width: 100%; max-width: 400px; background: rgba(255,255,255,0.06);
+      border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+      padding: 24px; text-align: center; margin-bottom: 14px;
     }
     .waiting-panel.show { display: block; animation: fadeIn 0.25s ease; }
     .waiting-panel .w-emoji { font-size: 2.5rem; margin-bottom: 10px; }
@@ -341,207 +189,166 @@
     .waiting-panel .w-sub { font-size: 0.82rem; color: #a0b4d0; }
     .answered-chips { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
     .answered-chip {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(6,214,160,0.15);
-      border: 1px solid rgba(6,214,160,0.35);
-      color: #06d6a0;
+      font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+      background: rgba(6,214,160,0.15); border: 1px solid rgba(6,214,160,0.35); color: #06d6a0;
     }
-    .answered-chip.pending {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.1);
-      color: #607080;
-    }
-
-    /* ── Round results screen ────────────────────────────── */
+    .answered-chip.pending { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #607080; }
+    /* Results screen */
     #results-screen { gap: 12px; }
     .results-header { text-align: center; width: 100%; max-width: 400px; }
     .results-header .r-emoji { font-size: 2.5rem; margin-bottom: 6px; }
     .results-header .r-title { font-size: 1.1rem; font-weight: 800; }
     .results-header .r-sub   { font-size: 0.82rem; color: #a0b4d0; margin-top: 4px; }
-
-    .results-list {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .results-list { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 8px; }
     .result-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+      background: rgba(255,255,255,0.06); border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);
     }
     .result-row.got-point { border-color: #ffd166; background: rgba(255,209,102,0.08); }
     .result-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .result-name { font-size: 0.9rem; font-weight: 700; flex: 1; }
     .result-answer-badge {
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
+      font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 20px;
     }
     .result-answer-badge.a-badge { background: rgba(247,37,133,0.2); color: #f72585; border: 1px solid rgba(247,37,133,0.35); }
     .result-answer-badge.b-badge { background: rgba(76,201,240,0.2); color: #4cc9f0; border: 1px solid rgba(76,201,240,0.35); }
+    .result-answer-badge.c-badge { background: rgba(6,214,160,0.2); color: #06d6a0; border: 1px solid rgba(6,214,160,0.35); }
+    .result-answer-badge.none-badge { background: rgba(255,255,255,0.05); color: #607080; border: 1px solid rgba(255,255,255,0.1); }
     .result-point-tag { font-size: 0.75rem; font-weight: 800; color: #ffd166; }
-
-    /* ── Game over screen ────────────────────────────────── */
+    .correct-answer-box {
+      width: 100%; max-width: 400px; background: rgba(255,209,102,0.1);
+      border: 1px solid rgba(255,209,102,0.35); border-radius: 14px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+    }
+    .correct-answer-box .ca-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #ffd166; font-weight: 700; white-space: nowrap; }
+    .correct-answer-box .ca-text { font-size: 0.88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    /* Round over screen */
+    #round-over-screen { gap: 12px; }
+    .round-over-header { text-align: center; width: 100%; max-width: 400px; }
+    .round-over-header .ro-emoji { font-size: 2.5rem; margin-bottom: 6px; }
+    .round-over-header .ro-title { font-size: 1.2rem; font-weight: 800; }
+    .round-over-header .ro-sub { font-size: 0.84rem; color: #a0b4d0; margin-top: 4px; }
+    .elimination-box {
+      width: 100%; max-width: 400px; background: rgba(247,37,133,0.1);
+      border: 1px solid rgba(247,37,133,0.35); border-radius: 16px; padding: 16px 20px; text-align: center;
+    }
+    .elimination-box .elim-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #f72585; font-weight: 700; margin-bottom: 6px; }
+    .elimination-box .elim-names { font-size: 1.1rem; font-weight: 800; color: #fff; }
+    .elimination-box .elim-sub { font-size: 0.82rem; color: #a0b4d0; margin-top: 4px; }
+    .score-table { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 8px; }
+    .score-row {
+      display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+      background: rgba(255,255,255,0.06); border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);
+    }
+    .score-row.top-score { border-color: #ffd166; background: rgba(255,209,102,0.08); }
+    .score-row.eliminated-row { opacity: 0.4; }
+    .score-row .sr-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .score-row .sr-name { flex: 1; font-size: 0.9rem; font-weight: 700; }
+    .score-row .sr-pts { font-size: 1.1rem; font-weight: 900; }
+    /* Tiebreaker */
+    .tiebreaker-banner {
+      width: 100%; max-width: 400px; background: rgba(255,209,102,0.12);
+      border: 1px solid rgba(255,209,102,0.4); border-radius: 14px;
+      padding: 10px 16px; text-align: center; margin-bottom: 8px;
+      font-size: 0.88rem; font-weight: 700; color: #ffd166;
+    }
+    /* Gameover screen */
     #gameover-screen { gap: 12px; text-align: center; }
     #gameover-screen .trophy { font-size: 4rem; }
     #gameover-screen h2 { font-size: 1.6rem; font-weight: 900; }
     #gameover-screen > p { font-size: 0.9rem; color: #a0b4d0; }
-
-    .leaderboard {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .leaderboard { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 8px; }
     .lb-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+      background: rgba(255,255,255,0.06); border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);
     }
     .lb-row.lb-winner { border-color: #ffd166; background: rgba(255,209,102,0.1); }
+    .lb-row.lb-eliminated { opacity: 0.4; }
     .lb-rank { font-size: 1.2rem; width: 28px; text-align: center; }
     .lb-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .lb-name { flex: 1; font-size: 0.95rem; font-weight: 700; text-align: left; }
     .lb-score { font-size: 1.6rem; font-weight: 900; }
-
-    /* ── Dancing emoji overlay ───────────────────────────── */
+    /* Dance overlay */
     #dance-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      pointer-events: none;
-      justify-content: center;
-      align-items: center;
+      display: none; position: fixed; inset: 0; z-index: 999;
+      pointer-events: none; justify-content: center; align-items: center;
     }
     #dance-overlay.show { display: flex; }
     .dance-burst { display: flex; flex-direction: column; align-items: center; gap: 6px; animation: dancePop 1.1s ease forwards; }
     .dance-emoji { font-size: 5.5rem; line-height: 1; filter: drop-shadow(0 0 24px rgba(247,37,133,0.8)); animation: danceWiggle 0.35s ease infinite alternate; }
     .dance-label { font-size: 1.1rem; font-weight: 800; color: #ffd166; text-shadow: 0 0 16px rgba(255,209,102,0.9); letter-spacing: 0.5px; }
     .confetti-bg { position: fixed; inset: 0; background: radial-gradient(ellipse at center, rgba(247,37,133,0.18) 0%, transparent 70%); animation: confettiFade 1.1s ease forwards; }
-
-    /* ── Score pop ───────────────────────────────────────── */
-    @keyframes scorePop {
-      0%   { transform: scale(1); }
-      40%  { transform: scale(1.6); color: #ffd166; }
-      100% { transform: scale(1); }
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(247,37,133,0.9); color: white;
+      padding: 12px 24px; border-radius: 30px; font-size: 0.88rem; font-weight: 600;
+      transition: transform 0.3s ease; z-index: 9999; white-space: nowrap;
     }
-    .score-popping { animation: scorePop 0.5s ease; }
-
-    /* ── Keyframes ───────────────────────────────────────── */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    /* Config warning */
+    #config-warning {
+      display: none; width: 100%; max-width: 400px; background: rgba(255,120,0,0.15);
+      border: 1px solid rgba(255,120,0,0.5); border-radius: 16px; padding: 16px;
+      margin-bottom: 16px; font-size: 0.82rem; color: #ffb347; line-height: 1.5;
     }
-    @keyframes danceWiggle {
-      from { transform: rotate(-14deg) scale(1); }
-      to   { transform: rotate(14deg) scale(1.12); }
-    }
+    #config-warning strong { color: #fff; display: block; margin-bottom: 6px; font-size: 0.88rem; }
+    /* Keyframes */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes danceWiggle { from { transform: rotate(-14deg) scale(1); } to { transform: rotate(14deg) scale(1.12); } }
     @keyframes dancePop {
       0%   { opacity: 0; transform: scale(0.4) translateY(40px); }
       20%  { opacity: 1; transform: scale(1.15) translateY(0); }
       75%  { opacity: 1; transform: scale(1) translateY(0); }
       100% { opacity: 0; transform: scale(0.85) translateY(-20px); }
     }
-    @keyframes confettiFade {
-      0%   { opacity: 0; }
-      20%  { opacity: 1; }
-      75%  { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* ── Error toast ─────────────────────────────────────── */
-    #toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: rgba(247,37,133,0.9);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 30px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      transition: transform 0.3s ease;
-      z-index: 9999;
-      white-space: nowrap;
-    }
-    #toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* ── Firebase config warning ─────────────────────────── */
-    #config-warning {
-      display: none;
-      width: 100%;
-      max-width: 400px;
-      background: rgba(255,120,0,0.15);
-      border: 1px solid rgba(255,120,0,0.5);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      font-size: 0.82rem;
-      color: #ffb347;
-      line-height: 1.5;
-    }
-    #config-warning strong { color: #fff; display: block; margin-bottom: 6px; font-size: 0.88rem; }
-    #config-warning a { color: #4cc9f0; }
+    @keyframes confettiFade { 0% { opacity: 0; } 20% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; } }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>⚽ Would You Rather?</h1>
+  <h1>⚽ Women's Soccer Trivia</h1>
   <p>The Soccer Carpool Game</p>
 </header>
 
 <div id="config-warning">
   <strong>⚠️ Firebase Setup Required</strong>
-  This game needs a free Firebase project to sync players across devices.<br>
-  See setup instructions at the bottom of the page source, or ask your developer to configure it.
+  This game needs a free Firebase project to sync players across devices.
 </div>
 
+<!-- HOME -->
 <div id="home-screen" class="screen show">
-  <div class="box" style="max-width:400px; width:100%; margin-bottom:14px;">
-    <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:6px;">Who's playing? 🎉</h2>
-    <p style="font-size:0.85rem; color:#a0b4d0; margin-bottom:16px;">Multiplayer — everyone uses their own device!</p>
+  <div class="box" style="max-width:400px;width:100%;margin-bottom:14px;">
+    <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:6px;">Who's playing? 🎉</h2>
+    <p style="font-size:0.85rem;color:#a0b4d0;margin-bottom:16px;">Multiplayer — everyone uses their own device!</p>
     <label class="name-label">Your Name</label>
     <input id="my-name" class="name-input" type="text" placeholder="Enter your name" maxlength="16" autocomplete="off" />
     <button class="btn btn-primary" onclick="createGame()">🎮 Create New Game</button>
     <div class="divider">or join existing game</div>
     <div class="join-row">
-      <input id="join-code" class="name-input" type="text" placeholder="CODE" maxlength="4" autocomplete="off" style="text-transform:uppercase; letter-spacing:3px; text-align:center; font-weight:800; font-size:1.1rem;" />
-      <button class="btn btn-secondary" onclick="joinGame()" style="width:auto; padding:14px 20px; margin-bottom:0; flex-shrink:0;">Join →</button>
+      <input id="join-code" class="name-input" type="text" placeholder="CODE" maxlength="4" autocomplete="off"
+        style="text-transform:uppercase;letter-spacing:3px;text-align:center;font-weight:800;font-size:1.1rem;" />
+      <button class="btn btn-secondary" onclick="joinGame()" style="width:auto;padding:14px 20px;margin-bottom:0;flex-shrink:0;">Join →</button>
     </div>
   </div>
   <div class="instructions-box">
     <h3>📋 How to Play</h3>
     <ol>
-      <li><strong>One person creates a game</strong> and shares the 4-letter room code with everyone in the car.</li>
-      <li>Everyone else <strong>joins with the code</strong> on their own phone.</li>
-      <li>Each round shows a <strong>Would You Rather</strong> question on every device simultaneously.</li>
-      <li>Everyone picks their answer <strong>secretly on their own screen.</strong></li>
-      <li>When all players have answered, <strong>results are revealed!</strong></li>
-      <li>Players who picked the <strong>minority answer</strong> (least popular choice) earn <strong>+1 point.</strong> 🏆</li>
-      <li>After <strong>10 questions</strong>, the leaderboard shows the winner!</li>
+      <li><strong>One person creates a game</strong> and shares the 4-letter room code.</li>
+      <li>Everyone <strong>joins with the code</strong> on their own phone.</li>
+      <li>Each round has <strong>5 trivia questions</strong> about women's professional soccer.</li>
+      <li>You have <strong>10 seconds</strong> to pick A, B, or C — unanswered = wrong!</li>
+      <li>After each of the <strong>3 rounds</strong>, the player in last place is <strong>eliminated</strong>.</li>
+      <li>After Round 3, the player with the <strong>most correct answers wins</strong>! 🏆</li>
+      <li>If there's a <strong>tie for 1st</strong>, a sudden-death tiebreaker decides it all.</li>
     </ol>
-    <div class="scoring-note">⚡ Be bold — dare to be different and rack up points!</div>
+    <div class="scoring-note">⚡ +1 point for every correct answer — speed doesn't matter, accuracy does!</div>
   </div>
 </div>
 
+<!-- LOBBY -->
 <div id="lobby-screen" class="screen">
   <div class="room-code-box">
     <div class="room-code-label">Share this code to join</div>
@@ -552,7 +359,7 @@
     <div class="player-list-title">Players in lobby</div>
     <div class="player-list" id="lobby-player-list"></div>
   </div>
-  <div style="width:100%; max-width:400px;">
+  <div style="width:100%;max-width:400px;">
     <div id="host-start-area" style="display:none;">
       <button class="btn btn-primary" onclick="hostStartGame()">Start Game ⚽ (<span id="player-count">1</span> players)</button>
       <p class="waiting-text" style="margin-top:8px;">Need at least 2 players to start.</p>
@@ -563,46 +370,61 @@
   </div>
 </div>
 
+<!-- GAME (question) -->
 <div id="game-screen" class="screen">
   <div class="mini-scores" id="mini-scores"></div>
-  <div class="progress-bar-wrap">
-    <div class="progress-bar-fill" id="progress-bar"></div>
+  <div class="round-indicator">
+    <span class="ri-round" id="ri-round">Round 1 of 3</span>
+    <span id="ri-q">Q 1 / 5</span>
+  </div>
+  <div id="tiebreaker-banner" class="tiebreaker-banner" style="display:none;">⚡ SUDDEN DEATH TIEBREAKER — First correct answer wins!</div>
+  <div class="timer-wrap">
+    <div class="timer-number" id="timer-number">10</div>
+    <div class="timer-bar-outer">
+      <div class="timer-bar-inner" id="timer-bar"></div>
+    </div>
   </div>
   <div class="card" id="question-card">
     <div class="card-header">
-      <span class="category-badge" id="category-badge">Soccer</span>
+      <span class="category-badge">⚽ Women's Soccer</span>
       <span class="question-number" id="question-number"></span>
     </div>
     <div class="question-text" id="question-text">Loading…</div>
     <div class="options">
-      <button class="option-btn option-a" id="btn-a" onclick="submitAnswer('A')">
-        <span class="icon">🅰️</span>
-        <span id="option-a-text">Option A</span>
+      <button class="option-btn option-a" id="btn-a" onclick="submitAnswer('a')">
+        <span class="icon">A</span><span id="option-a-text">Option A</span>
       </button>
-      <button class="option-btn option-b" id="btn-b" onclick="submitAnswer('B')">
-        <span class="icon">🅱️</span>
-        <span id="option-b-text">Option B</span>
+      <button class="option-btn option-b" id="btn-b" onclick="submitAnswer('b')">
+        <span class="icon">B</span><span id="option-b-text">Option B</span>
+      </button>
+      <button class="option-btn option-c" id="btn-c" onclick="submitAnswer('c')">
+        <span class="icon">C</span><span id="option-c-text">Option C</span>
       </button>
     </div>
   </div>
   <div class="waiting-panel" id="waiting-panel">
     <div class="w-emoji">⏳</div>
-    <div class="w-title">Answer locked in!</div>
+    <div class="w-title" id="waiting-title">Answer locked in!</div>
     <div class="w-sub">Waiting for everyone else…</div>
     <div class="answered-chips" id="answered-chips"></div>
   </div>
 </div>
 
+<!-- RESULTS (per question) -->
 <div id="results-screen" class="screen">
   <div class="results-header">
     <div class="r-emoji" id="r-emoji">⚡</div>
     <div class="r-title" id="r-title">Results!</div>
     <div class="r-sub" id="r-sub"></div>
   </div>
+  <div class="correct-answer-box">
+    <span class="ca-label">✅ Correct:</span>
+    <span class="ca-text" id="correct-answer-text"></span>
+  </div>
   <div class="results-list" id="results-list"></div>
-  <div style="width:100%; max-width:400px; margin-top:4px;">
+  <div style="width:100%;max-width:400px;margin-top:4px;">
     <div id="host-next-area" style="display:none;">
-      <button class="btn btn-primary" onclick="hostNextQuestion()">Next Question ➡️</button>
+      <button class="btn btn-primary" id="next-btn" onclick="hostNextQuestion()">Next Question ➡️</button>
     </div>
     <div id="guest-next-area">
       <p class="waiting-text">⏳ Waiting for host to continue…</p>
@@ -610,32 +432,52 @@
   </div>
 </div>
 
+<!-- ROUND OVER -->
+<div id="round-over-screen" class="screen">
+  <div class="round-over-header">
+    <div class="ro-emoji">🔔</div>
+    <div class="ro-title" id="ro-title">Round 1 Complete!</div>
+    <div class="ro-sub" id="ro-sub">Scores after 5 questions</div>
+  </div>
+  <div class="score-table" id="round-score-table"></div>
+  <div class="elimination-box" id="elimination-box">
+    <div class="elim-label">❌ Eliminated</div>
+    <div class="elim-names" id="elim-names"></div>
+    <div class="elim-sub" id="elim-sub"></div>
+  </div>
+  <div style="width:100%;max-width:400px;">
+    <div id="host-next-round-area" style="display:none;">
+      <button class="btn btn-primary" id="next-round-btn" onclick="hostStartNextRound()">Start Round 2 ⚽</button>
+    </div>
+    <div id="guest-next-round-area">
+      <p class="waiting-text">⏳ Waiting for host to start next round…</p>
+    </div>
+  </div>
+</div>
+
+<!-- GAMEOVER -->
 <div id="gameover-screen" class="screen">
   <div class="trophy">🏆</div>
   <h2 id="winner-text">Winner!</h2>
   <p id="winner-sub"></p>
   <div class="leaderboard" id="leaderboard"></div>
-  <p style="font-size:0.78rem; color:#a0b4d0; max-width:400px; text-align:center;">
-    Points = questions where you picked the minority answer!
-  </p>
-  <div style="width:100%; max-width:400px;">
+  <div style="width:100%;max-width:400px;margin-top:8px;">
     <button class="btn btn-secondary" onclick="restartToHome()">🔄 Play Again</button>
   </div>
 </div>
 
+<!-- DANCE OVERLAY -->
 <div id="dance-overlay">
   <div class="confetti-bg"></div>
   <div class="dance-burst">
-    <div class="dance-emoji" id="dance-emoji">💃</div>
-    <div class="dance-label" id="dance-label">Minority wins!</div>
+    <div class="dance-emoji" id="dance-emoji">🎉</div>
+    <div class="dance-label" id="dance-label">Correct! +1 ⭐</div>
   </div>
 </div>
 
 <div id="toast"></div>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
 <script>
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyBSz8VmAkO5nX1wjphBvt9iKzqGU6HXMt4",
@@ -648,147 +490,186 @@ const FIREBASE_CONFIG = {
 };
 
 const CONFIGURED = !FIREBASE_CONFIG.apiKey.startsWith('YOUR_');
-if (!CONFIGURED) {
-  document.getElementById('config-warning').style.display = 'block';
-}
+if (!CONFIGURED) document.getElementById('config-warning').style.display = 'block';
 
 let db;
-try {
-  firebase.initializeApp(FIREBASE_CONFIG);
-  db = firebase.database();
-} catch(e) {}
+try { firebase.initializeApp(FIREBASE_CONFIG); db = firebase.database(); } catch(e) {}
 
+/* ── Question Bank ─────────────────────────────────────────────────────── */
 const ALL_QUESTIONS = [
-  { cat:"soccer", q:"Would you rather...", a:"Score the winning goal in the World Cup final", b:"Make the perfect assist that leads to the winning goal" },
-  { cat:"soccer", q:"Would you rather...", a:"Play for your favorite club team forever", b:"Represent your country in every international tournament" },
-  { cat:"soccer", q:"Would you rather...", a:"Have a rocket-powered shot", b:"Have perfect dribbling that no one can stop" },
-  { cat:"soccer", q:"Would you rather...", a:"Play on a rainy, muddy field", b:"Play in extreme heat on a dry field" },
-  { cat:"soccer", q:"Would you rather...", a:"Be the best goalkeeper in the world", b:"Be the best striker in the world" },
-  { cat:"soccer", q:"Would you rather...", a:"Score a hat trick in a losing game", b:"Score zero goals but your team wins the championship" },
-  { cat:"soccer", q:"Would you rather...", a:"Play striker every game", b:"Play midfielder every game" },
-  { cat:"soccer", q:"Would you rather...", a:"Train with your favorite soccer player for a day", b:"Watch your favorite team win a championship live" },
-  { cat:"soccer", q:"Would you rather...", a:"Have a free kick from 30 yards any time you want", b:"Always get a 1-on-1 with the goalkeeper" },
-  { cat:"soccer", q:"Would you rather...", a:"Win a championship with your current team", b:"Get called up to play for the national team" },
-  { cat:"soccer", q:"Would you rather...", a:"Never miss a penalty kick", b:"Never lose a header" },
-  { cat:"soccer", q:"Would you rather...", a:"Play barefoot on grass", b:"Wear the wrong size cleats all season" },
-  { cat:"soccer", q:"Would you rather...", a:"Score off a bicycle kick", b:"Score off an incredible volley" },
-  { cat:"soccer", q:"Would you rather...", a:"Be superfast but can't shoot", b:"Have a perfect shot but be slow" },
-  { cat:"soccer", q:"Would you rather...", a:"Play in the Olympics", b:"Play in the World Cup" },
-  { cat:"funny", q:"Would you rather...", a:"Have to sing the national anthem before every soccer practice", b:"Have to do a cartwheel every time you score a goal" },
-  { cat:"funny", q:"Would you rather...", a:"Wear your soccer jersey to school every single day for a year", b:"Carry a soccer ball everywhere you go for a month" },
-  { cat:"funny", q:"Would you rather...", a:"Have a coach who speaks only in rhymes", b:"Have a referee who dances after every call" },
-  { cat:"funny", q:"Would you rather...", a:"Trip over the ball in front of everyone", b:"Accidentally kick the ball into your own net" },
-  { cat:"funny", q:"Would you rather...", a:"Sneeze every time you touch the ball", b:"Hiccup every time you try to shoot" },
-  { cat:"funny", q:"Would you rather...", a:"Play soccer in a giant hamster ball", b:"Play soccer on a giant trampoline" },
-  { cat:"funny", q:"Would you rather...", a:"Have a team mascot that follows you everywhere", b:"Have your team play with a square ball" },
-  { cat:"funny", q:"Would you rather...", a:"Celebrate every goal with the worm dance", b:"Celebrate every goal with a dramatic fall to the ground" },
-  { cat:"life", q:"Would you rather...", a:"Have a sleepover every weekend with your best friend", b:"Go on one amazing vacation every year with your family" },
-  { cat:"life", q:"Would you rather...", a:"Only eat your favorite food for a month", b:"Try a new food every single day for a month" },
-  { cat:"life", q:"Would you rather...", a:"Have a pet dog", b:"Have a pet cat" },
-  { cat:"life", q:"Would you rather...", a:"Be amazing at every sport you try", b:"Be amazing at every instrument you pick up" },
-  { cat:"life", q:"Would you rather...", a:"Live in a city with tons to do", b:"Live by the beach" },
-  { cat:"life", q:"Would you rather...", a:"Be able to fly", b:"Be able to breathe underwater" },
-  { cat:"life", q:"Would you rather...", a:"Have no homework ever again", b:"Have unlimited snacks at school" },
-  { cat:"life", q:"Would you rather...", a:"Meet your favorite singer", b:"Meet your favorite athlete" },
-  { cat:"life", q:"Would you rather...", a:"Have a superpower you can never tell anyone about", b:"Be famous but have no superpower" },
-  { cat:"life", q:"Would you rather...", a:"Always have the perfect weather", b:"Never have to worry about your hair" },
-  { cat:"life", q:"Would you rather...", a:"Skip school for a week to travel somewhere cool", b:"Stay home for a week with unlimited movies and snacks" },
-  { cat:"tough", q:"Would you rather...", a:"Be really good at soccer but have a tough coach", b:"Be okay at soccer but have the most fun coach ever" },
-  { cat:"tough", q:"Would you rather...", a:"Give up your phone for a month", b:"Give up your favorite sport for a month" },
-  { cat:"tough", q:"Would you rather...", a:"Always be the best player on a losing team", b:"Always be the weakest player on a winning team" },
-  { cat:"tough", q:"Would you rather...", a:"Wake up at 5am every day for a week of soccer training", b:"Practice soccer for 4 hours straight in one day" },
-  { cat:"tough", q:"Would you rather...", a:"Lose your best friend but win a championship", b:"Lose a championship but keep your best friend" },
-  { cat:"tough", q:"Would you rather...", a:"Be great at school but bad at sports", b:"Be great at sports but struggle at school" },
-  { cat:"tough", q:"Would you rather...", a:"Tell your coach a hard truth", b:"Stay quiet and let something unfair happen" },
+  { q:"Who holds the all-time record for most international goals in women's soccer?", a:"Marta", b:"Christine Sinclair", c:"Abby Wambach", correct:"b" },
+  { q:"Which country won the 2023 FIFA Women's World Cup?", a:"England", b:"Australia", c:"Spain", correct:"c" },
+  { q:"How many times has the USA won the FIFA Women's World Cup?", a:"3", b:"4", c:"5", correct:"b" },
+  { q:"Marta won the FIFA Best Women's Player award a record how many times?", a:"5", b:"6", c:"7", correct:"b" },
+  { q:"Who won the first ever Ballon d'Or Féminin award in 2018?", a:"Megan Rapinoe", b:"Marta", c:"Ada Hegerberg", correct:"c" },
+  { q:"What country does Ada Hegerberg represent?", a:"Sweden", b:"Denmark", c:"Norway", correct:"c" },
+  { q:"Which club does Sam Kerr play for?", a:"Arsenal Women", b:"Chelsea FC Women", c:"Manchester City Women", correct:"b" },
+  { q:"Sam Kerr represents which country internationally?", a:"New Zealand", b:"England", c:"Australia", correct:"c" },
+  { q:"Who won the Golden Ball (best player) at the 2023 Women's World Cup?", a:"Alexia Putellas", b:"Aitana Bonmatí", c:"Sam Kerr", correct:"b" },
+  { q:"In what year did women's soccer first appear in the Olympic Games?", a:"1992", b:"2000", c:"1996", correct:"c" },
+  { q:"Who holds the NWSL record for most goals in a single season (17 goals in 2017)?", a:"Alex Morgan", b:"Sam Kerr", c:"Lynn Williams", correct:"b" },
+  { q:"Which team has won the most NWSL Championships?", a:"North Carolina Courage", b:"Houston Dash", c:"Portland Thorns", correct:"c" },
+  { q:"Canada won 2020 Olympic gold in women's soccer. Who did they defeat in the final?", a:"USA", b:"Sweden", c:"Great Britain", correct:"b" },
+  { q:"Which USWNT player scored a hat trick in the 2015 Women's World Cup final?", a:"Alex Morgan", b:"Megan Rapinoe", c:"Carli Lloyd", correct:"c" },
+  { q:"Which country hosted the first FIFA Women's World Cup in 1991?", a:"USA", b:"Germany", c:"China", correct:"c" },
+  { q:"Which country won the first FIFA Women's World Cup in 1991?", a:"Germany", b:"USA", c:"Norway", correct:"b" },
+  { q:"Who was the USWNT head coach when they won the 2019 Women's World Cup?", a:"Tony DiCicco", b:"Vlatko Andonovski", c:"Jill Ellis", correct:"c" },
+  { q:"What is the nickname of England's women's national soccer team?", a:"The Roses", b:"The Three Lions", c:"The Lionesses", correct:"c" },
+  { q:"England won the UEFA Women's Euro championship in what year?", a:"2017", b:"2022", c:"2019", correct:"b" },
+  { q:"Who scored the winning goal for England in the 2022 UEFA Women's Euro final?", a:"Beth Mead", b:"Lucy Bronze", c:"Chloe Kelly", correct:"c" },
+  { q:"Which club does Aitana Bonmatí play for?", a:"Real Madrid", b:"Atlético Madrid", c:"FC Barcelona", correct:"c" },
+  { q:"Megan Rapinoe played for which NWSL team throughout most of her career?", a:"Portland Thorns", b:"OL Reign", c:"Chicago Red Stars", correct:"b" },
+  { q:"Which country does Vivianne Miedema represent?", a:"Belgium", b:"Netherlands", c:"Germany", correct:"b" },
+  { q:"In what year did Abby Wambach retire from soccer?", a:"2014", b:"2016", c:"2015", correct:"c" },
+  { q:"Christine Sinclair, all-time international goals leader, represents which country?", a:"USA", b:"Australia", c:"Canada", correct:"c" },
+  { q:"How many FIFA Women's World Cups did Brazil's Marta appear in?", a:"4", b:"5", c:"6", correct:"c" },
+  { q:"Who won the Golden Ball (best player) at the 2019 Women's World Cup?", a:"Alex Morgan", b:"Rose Lavelle", c:"Megan Rapinoe", correct:"c" },
+  { q:"Which player won back-to-back Ballon d'Or Féminin awards in 2021 and 2022?", a:"Aitana Bonmatí", b:"Sam Kerr", c:"Alexia Putellas", correct:"c" },
+  { q:"The NWSL (National Women's Soccer League) started play in what year?", a:"2009", b:"2013", c:"2011", correct:"b" },
+  { q:"Which country has won the most UEFA Women's Championship titles?", a:"Norway", b:"Germany", c:"Sweden", correct:"b" },
+  { q:"Who scored the second goal for the USA in the 2019 Women's World Cup final vs Netherlands?", a:"Alex Morgan", b:"Megan Rapinoe", c:"Rose Lavelle", correct:"c" },
+  { q:"Trinity Rodman's famous father played which professional sport?", a:"Baseball", b:"Football", c:"Basketball", correct:"c" },
+  { q:"Title IX, which transformed women's sports in the USA, was passed in what year?", a:"1968", b:"1980", c:"1972", correct:"c" },
+  { q:"Marta holds the all-time Women's World Cup goals record with how many goals?", a:"15", b:"14", c:"17", correct:"c" },
+  { q:"Alex Morgan played for which English club in the 2019–20 season?", a:"Arsenal", b:"Chelsea", c:"Tottenham Hotspur", correct:"c" },
+  { q:"Who won the Golden Boot (top scorer) at the 2019 Women's World Cup?", a:"Alex Morgan", b:"Megan Rapinoe", c:"Ellen White", correct:"b" },
+  { q:"Kristine Lilly holds the all-time record for international appearances — how many caps?", a:"273", b:"354", c:"312", correct:"b" },
+  { q:"Which club does Ada Hegerberg play for?", a:"PSG", b:"Chelsea", c:"Olympique Lyonnais", correct:"c" },
+  { q:"Who was the top scorer (Golden Boot) at the 2023 Women's World Cup?", a:"Sam Kerr", b:"Hinata Miyazawa", c:"Aitana Bonmatí", correct:"b" },
+  { q:"Germany won the 2016 Olympic gold medal in women's soccer. Who did they beat in the final?", a:"USA", b:"Canada", c:"Sweden", correct:"c" },
+  { q:"Who scored the gold-medal-winning goal for the USA in the 2012 Olympics final vs Japan?", a:"Alex Morgan", b:"Carli Lloyd", c:"Abby Wambach", correct:"b" },
+  { q:"The famous 1999 Women's World Cup final was held at which stadium?", a:"Rose Bowl", b:"Giants Stadium", c:"Soldier Field", correct:"a" },
+  { q:"Which USWNT goalkeeper made a crucial save in the 1999 WWC final penalty shootout?", a:"Hope Solo", b:"Alyssa Naeher", c:"Briana Scurry", correct:"c" },
+  { q:"Brandi Chastain became iconic after the 1999 World Cup for what celebration?", a:"Sliding on her knees", b:"Removing her jersey", c:"A backflip", correct:"b" },
+  { q:"Which NWSL team won the inaugural 2013 NWSL Championship?", a:"Western New York Flash", b:"Seattle Reign", c:"Portland Thorns", correct:"c" },
+  { q:"Who was named NWSL Most Valuable Player in 2022?", a:"Mallory Swanson", b:"Lynn Williams", c:"Trinity Rodman", correct:"c" },
+  { q:"Abby Wambach scored a famous 122nd-minute header against which country in the 2011 WWC?", a:"Japan", b:"Australia", c:"Brazil", correct:"c" },
+  { q:"Which country's women's national team is nicknamed 'The Matildas'?", a:"New Zealand", b:"South Africa", c:"Australia", correct:"c" },
+  { q:"England finished as runner-up at the 2023 Women's World Cup. Who beat them in the final?", a:"France", b:"Spain", c:"Australia", correct:"b" },
+  { q:"Who won the Silver Ball (2nd best player) at the 2019 Women's World Cup?", a:"Alex Morgan", b:"Megan Rapinoe", c:"Rose Lavelle", correct:"c" },
+  { q:"Which professional women's league immediately preceded the NWSL in the USA?", a:"WUSA", b:"WPS", c:"W-League", correct:"b" },
+  { q:"Megan Rapinoe retired from professional soccer in what year?", a:"2022", b:"2024", c:"2023", correct:"c" },
+  { q:"Which country does Jenni Hermoso play for?", a:"Mexico", b:"Argentina", c:"Spain", correct:"c" },
+  { q:"Who won the 2023 Ballon d'Or Féminin?", a:"Alexia Putellas", b:"Sam Kerr", c:"Aitana Bonmatí", correct:"c" },
+  { q:"The USWNT has qualified for every Women's World Cup ever held — true or false?", a:"False, they missed 2003", b:"False, they missed 1995", c:"True", correct:"c" },
+  { q:"Which club does Lindsey Horan play for in France?", a:"PSG", b:"Montpellier", c:"Olympique Lyonnais", correct:"c" },
+  { q:"Who was the USWNT's starting goalkeeper at the 2019 Women's World Cup?", a:"Hope Solo", b:"Ashlyn Harris", c:"Alyssa Naeher", correct:"c" },
+  { q:"Olympique Lyonnais Féminin has won the UEFA Women's Champions League how many times?", a:"6", b:"7", c:"8", correct:"c" },
+  { q:"Carli Lloyd's famous midfield strike in the 2015 WWC final came in which minute?", a:"3rd", b:"5th", c:"16th", correct:"b" },
+  { q:"USA defeated which country in the 1999 Women's World Cup final penalty shootout?", a:"Brazil", b:"Germany", c:"China", correct:"c" },
+  { q:"How many international goals did Christine Sinclair score in her career?", a:"176", b:"190", c:"184", correct:"b" },
+  { q:"Julie Ertz primarily plays which position for the USWNT?", a:"Goalkeeper", b:"Forward", c:"Defensive midfielder", correct:"c" },
+  { q:"What country does Pernille Harder represent?", a:"Sweden", b:"Norway", c:"Denmark", correct:"c" },
+  { q:"Sam Kerr came off the bench to score for Australia vs England in the 2023 WWC semifinal. What was the final score?", a:"Australia won 2-1", b:"England won 3-1", c:"England won 2-0", correct:"b" },
+  { q:"Mia Hamm played most of her professional club career for which team?", a:"Carolina Courage", b:"San Jose CyberRays", c:"Washington Freedom", correct:"c" },
+  { q:"What position does Kelley O'Hara play for the USWNT?", a:"Forward", b:"Goalkeeper", c:"Defender", correct:"c" },
+  { q:"Who won the 2020 Olympics gold medal match, beating Canada to claim bronze for Sweden?", a:"Canada beat Sweden for gold", b:"Sweden beat Canada for bronze", c:"Sweden beat Canada, winning bronze", correct:"c" },
+  { q:"The USA won their first Women's World Cup in 1991. Who was their head coach?", a:"Tony DiCicco", b:"April Heinrichs", c:"Anson Dorrance", correct:"c" },
+  { q:"Which NWSL team is based in Kansas City?", a:"Kansas City Current", b:"Kansas City FC", c:"KC Royals Women", correct:"a" },
+  { q:"Who did the USA beat in the 2015 Women's World Cup final?", a:"Germany", b:"England", c:"Japan", correct:"c" },
+  { q:"Alexia Putellas plays for which club?", a:"Real Madrid", b:"Atlético Madrid", c:"FC Barcelona", correct:"c" },
+  { q:"Which country finished 3rd at the 2023 Women's World Cup?", a:"Australia", b:"France", c:"Sweden", correct:"c" },
+  { q:"Who is the all-time leading scorer for the Canadian women's national team?", a:"Kaylyn Kyle", b:"Christine Sinclair", c:"Diana Matheson", correct:"b" }
 ];
 
-const CAT_LABELS  = { soccer:"⚽ Soccer", funny:"😂 Funny", life:"🌸 Life", tough:"💪 Tough Choice" };
+/* ── Constants ─────────────────────────────────────────────────────────── */
+const ROUNDS        = 3;
+const QS_PER_ROUND  = 5;
+const TOTAL_QS      = ROUNDS * QS_PER_ROUND;    // 15
+const TB_POOL_SIZE  = 10;                         // tiebreaker reserve
+const TIMER_SECS    = 10;
+const TEN_DAYS_MS   = 10 * 24 * 60 * 60 * 1000;
 const PLAYER_COLORS = ['#f72585','#4cc9f0','#06d6a0','#ffd166','#b5179e','#4361ee','#f4a261','#2ec4b6'];
-const TOTAL = 10;
-const DANCE_EMOJIS = ['💃','🕺','🎉','✨','🌟','🔥'];
+const DANCE_EMOJIS  = ['🎉','⭐','🔥','✨','🌟','💫'];
 
-let myId       = sessionStorage.getItem('playerId') || genId();
-let myName     = '';
-let roomCode   = '';
-let isHost     = false;
-let hasAnswered = false;
-let roomRef    = null;
-let danceTimer = null;
-
+/* ── State ─────────────────────────────────────────────────────────────── */
+let myId         = sessionStorage.getItem('playerId') || genId();
+let myName       = '';
+let roomCode     = '';
+let isHost       = false;
+let hasAnswered  = false;
+let roomRef      = null;
+let latestRoom   = null;
+let danceTimer   = null;
+let timerIval    = null;
+let hostAdvTimeout = null;
+let lastRenderedQKey = '';   // prevents double-render
+let lastAdvancedQKey = '';   // prevents host double-advance
 sessionStorage.setItem('playerId', myId);
 
-function genId() { return Math.random().toString(36).slice(2, 10); }
-function genRoomCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  let code = '';
-  for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return code;
+/* ── Utilities ─────────────────────────────────────────────────────────── */
+function genId()       { return Math.random().toString(36).slice(2,10); }
+function genRoomCode() { const c='ABCDEFGHJKLMNPQRSTUVWXYZ'; let r=''; for(let i=0;i<4;i++) r+=c[Math.floor(Math.random()*c.length)]; return r; }
+function shuffle(arr)  { const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]; } return a; }
+function playerColor(i){ return PLAYER_COLORS[i % PLAYER_COLORS.length]; }
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show')); document.getElementById(id).classList.add('show'); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
+function celebrateDance(label){
+  const ov=document.getElementById('dance-overlay');
+  document.getElementById('dance-emoji').textContent=DANCE_EMOJIS[Math.floor(Math.random()*DANCE_EMOJIS.length)];
+  document.getElementById('dance-label').textContent=label;
+  ov.classList.remove('show'); void ov.offsetWidth; ov.classList.add('show');
+  if(danceTimer) clearTimeout(danceTimer);
+  danceTimer=setTimeout(()=>ov.classList.remove('show'),1150);
 }
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+function getMyName(){ const n=document.getElementById('my-name').value.trim(); if(!n){showToast('Please enter your name first!');return null;} return n; }
+function qKey(room){ return `${room.round||1}-${room.roundQ||0}-${room.isTiebreaker?'tb':''}`; }
+
+/* ── Question pool (no-repeat within 10 days) ──────────────────────────── */
+async function getAvailableIndices() {
+  if (!CONFIGURED) return shuffle([...Array(ALL_QUESTIONS.length).keys()]);
+  const snap = await db.ref('usedQids').once('value');
+  const used = snap.val() || {};
+  const cutoff = Date.now() - TEN_DAYS_MS;
+  const recent = new Set(Object.entries(used).filter(([,ts])=>ts>cutoff).map(([i])=>parseInt(i)));
+  let avail = [...Array(ALL_QUESTIONS.length).keys()].filter(i=>!recent.has(i));
+  if (avail.length < TOTAL_QS + TB_POOL_SIZE) {
+    // Reset — not enough fresh questions, allow repeats
+    avail = [...Array(ALL_QUESTIONS.length).keys()];
   }
-  return a;
-}
-function playerColor(index) { return PLAYER_COLORS[index % PLAYER_COLORS.length]; }
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
-  document.getElementById(id).classList.add('show');
-}
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-function celebrateDance(label) {
-  const overlay = document.getElementById('dance-overlay');
-  document.getElementById('dance-emoji').textContent = DANCE_EMOJIS[Math.floor(Math.random() * DANCE_EMOJIS.length)];
-  document.getElementById('dance-label').textContent = label;
-  overlay.classList.remove('show');
-  void overlay.offsetWidth;
-  overlay.classList.add('show');
-  if (danceTimer) clearTimeout(danceTimer);
-  danceTimer = setTimeout(() => overlay.classList.remove('show'), 1150);
+  return shuffle(avail);
 }
 
-function getMyName() {
-  const n = document.getElementById('my-name').value.trim();
-  if (!n) { showToast('Please enter your name first!'); return null; }
-  return n;
+async function markQuestionsUsed(indices) {
+  if (!CONFIGURED) return;
+  const now = Date.now();
+  const updates = {};
+  indices.forEach(i => { updates[`usedQids/${i}`] = now; });
+  await db.ref().update(updates);
 }
 
+/* ── Create / Join ─────────────────────────────────────────────────────── */
 async function createGame() {
-  if (!CONFIGURED) { showToast('Firebase not configured — see setup instructions'); return; }
-  const name = getMyName();
-  if (!name) return;
-  myName = name;
-  isHost = true;
-  roomCode = genRoomCode();
-  const questionOrder = shuffle([...Array(ALL_QUESTIONS.length).keys()]).slice(0, TOTAL);
+  if (!CONFIGURED) { showToast('Firebase not configured'); return; }
+  const name = getMyName(); if (!name) return;
+  myName = name; isHost = true; roomCode = genRoomCode();
+  const avail = await getAvailableIndices();
+  const questionOrder    = avail.slice(0, TOTAL_QS);
+  const tiebreakerOrder  = avail.slice(TOTAL_QS, TOTAL_QS + TB_POOL_SIZE);
+  markQuestionsUsed([...questionOrder, ...tiebreakerOrder]);
   await db.ref(`rooms/${roomCode}`).set({
-    hostId: myId, status: 'lobby', currentQ: 0, questionOrder,
+    hostId: myId, status: 'lobby',
+    round: 1, roundQ: 0, currentQ: 0,
+    questionOrder, tiebreakerOrder, tiebreakerQIdx: 0,
+    isTiebreaker: false, tiebreakerPlayers: {},
     createdAt: Date.now(),
-    players: { [myId]: { name: myName, score: 0, online: true, joinedAt: Date.now() } }
+    players: { [myId]: { name:myName, score:0, online:true, joinedAt:Date.now(), eliminated:false } }
   });
   db.ref(`rooms/${roomCode}/players/${myId}/online`).onDisconnect().set(false);
   enterLobby();
 }
 
 async function joinGame() {
-  if (!CONFIGURED) { showToast('Firebase not configured — see setup instructions'); return; }
-  const name = getMyName();
-  if (!name) return;
+  if (!CONFIGURED) { showToast('Firebase not configured'); return; }
+  const name = getMyName(); if (!name) return;
   const code = document.getElementById('join-code').value.trim().toUpperCase();
-  if (code.length !== 4) { showToast('Enter the 4-letter room code'); return; }
+  if (code.length!==4) { showToast('Enter the 4-letter room code'); return; }
   const snap = await db.ref(`rooms/${code}`).once('value');
   if (!snap.exists()) { showToast('Room not found — check the code!'); return; }
   const room = snap.val();
   if (room.status !== 'lobby') { showToast('That game has already started!'); return; }
-  myName = name; isHost = false; roomCode = code;
-  await db.ref(`rooms/${roomCode}/players/${myId}`).set({ name: myName, score: 0, online: true, joinedAt: Date.now() });
+  myName=name; isHost=false; roomCode=code;
+  await db.ref(`rooms/${roomCode}/players/${myId}`).set({ name:myName, score:0, online:true, joinedAt:Date.now(), eliminated:false });
   db.ref(`rooms/${roomCode}/players/${myId}/online`).onDisconnect().set(false);
   enterLobby();
 }
@@ -796,44 +677,50 @@ async function joinGame() {
 function enterLobby() {
   document.getElementById('lobby-code').textContent = roomCode;
   document.getElementById('host-start-area').style.display = isHost ? 'block' : 'none';
-  document.getElementById('guest-wait-area').style.display = isHost ? 'none' : 'block';
+  document.getElementById('guest-wait-area').style.display  = isHost ? 'none'  : 'block';
   showScreen('lobby-screen');
   listenToRoom();
 }
-
 function copyRoomLink() {
   const url = `${location.origin}${location.pathname}?room=${roomCode}`;
-  navigator.clipboard.writeText(url).then(() => showToast('Invite link copied!')).catch(() => showToast(`Room code: ${roomCode}`));
+  navigator.clipboard.writeText(url).then(()=>showToast('Invite link copied!')).catch(()=>showToast(`Room code: ${roomCode}`));
 }
-
 function hostStartGame() {
   const count = parseInt(document.getElementById('player-count').textContent);
   if (count < 2) { showToast('Need at least 2 players!'); return; }
-  db.ref(`rooms/${roomCode}/status`).set('question');
+  db.ref(`rooms/${roomCode}`).update({ status:'question', questionStartedAt: firebase.database.ServerValue.TIMESTAMP });
 }
 
+/* ── Firebase Listener ─────────────────────────────────────────────────── */
 function listenToRoom() {
   if (roomRef) roomRef.off();
   roomRef = db.ref(`rooms/${roomCode}`);
   roomRef.on('value', snap => {
     if (!snap.exists()) return;
     const room = snap.val();
+    latestRoom = room;
     if (document.getElementById('lobby-screen').classList.contains('show')) {
       renderLobbyPlayers(room.players || {});
     }
     switch (room.status) {
-      case 'lobby': break;
+      case 'lobby':      break;
       case 'question':
         if (!document.getElementById('game-screen').classList.contains('show')) showScreen('game-screen');
         renderQuestion(room);
-        renderAnswerWaiting(room);
         renderMiniScores(room.players || {});
+        renderAnswerWaiting(room);
         checkAllAnswered(room);
         break;
       case 'results':
         if (!document.getElementById('results-screen').classList.contains('show')) {
           showScreen('results-screen');
           renderResults(room);
+        }
+        break;
+      case 'round_over':
+        if (!document.getElementById('round-over-screen').classList.contains('show')) {
+          showScreen('round-over-screen');
+          renderRoundOver(room);
         }
         break;
       case 'gameover':
@@ -844,208 +731,427 @@ function listenToRoom() {
   });
 }
 
+/* ── Lobby ─────────────────────────────────────────────────────────────── */
 function renderLobbyPlayers(players) {
   const list = document.getElementById('lobby-player-list');
-  const entries = Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt);
+  const entries = Object.entries(players).sort((a,b)=>a[1].joinedAt-b[1].joinedAt);
   document.getElementById('player-count').textContent = entries.length;
-  list.innerHTML = entries.map(([id, p], i) => `
+  list.innerHTML = entries.map(([id,p],i)=>`
     <div class="player-item">
       <div class="player-dot" style="background:${playerColor(i)}"></div>
       <span>${p.name}</span>
-      ${id === myId ? '<span style="font-size:0.7rem;color:#a0b4d0;margin-left:4px;">(you)</span>' : ''}
-      ${p.online === false ? '<span style="font-size:0.7rem;color:#607080;margin-left:4px;">offline</span>' : ''}
-      <span class="host-badge" style="display:${entries[0][0] === id ? 'inline' : 'none'}">Host</span>
-    </div>
-  `).join('');
+      ${id===myId ? '<span style="font-size:0.7rem;color:#a0b4d0;margin-left:4px;">(you)</span>' : ''}
+      ${p.online===false ? '<span style="font-size:0.7rem;color:#607080;margin-left:4px;">offline</span>' : ''}
+      <span class="host-badge" style="display:${entries[0][0]===id?'inline':'none'}">Host</span>
+    </div>`).join('');
+}
+
+/* ── Timer ─────────────────────────────────────────────────────────────── */
+function startTimer(questionStartedAt) {
+  clearInterval(timerIval);
+  clearTimeout(hostAdvTimeout);
+  const endTime = questionStartedAt + TIMER_SECS * 1000;
+  timerIval = setInterval(() => {
+    const remaining = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
+    const pct = remaining / TIMER_SECS * 100;
+    const numEl = document.getElementById('timer-number');
+    const barEl = document.getElementById('timer-bar');
+    if (numEl) { numEl.textContent = remaining; numEl.className = 'timer-number' + (remaining <= 3 ? ' urgent' : ''); }
+    if (barEl) { barEl.style.width = pct + '%'; barEl.className = 'timer-bar-inner' + (remaining <= 3 ? ' urgent' : ''); }
+    if (remaining === 0) {
+      clearInterval(timerIval);
+      if (!hasAnswered) autoSubmitTimeout();
+    }
+  }, 150);
+
+  if (isHost) {
+    hostAdvTimeout = setTimeout(() => forceAdvanceQuestion(), (TIMER_SECS + 2) * 1000);
+  }
+}
+
+function autoSubmitTimeout() {
+  if (hasAnswered) return;
+  hasAnswered = true;
+  document.getElementById('btn-a').disabled = true;
+  document.getElementById('btn-b').disabled = true;
+  document.getElementById('btn-c').disabled = true;
+  document.getElementById('waiting-title').textContent = "Time's up!";
+  document.getElementById('waiting-panel').classList.add('show');
+  db.ref(`rooms/${roomCode}/answers/${myId}`).set('none');
+}
+
+function forceAdvanceQuestion() {
+  if (!isHost || !latestRoom || latestRoom.status !== 'question') return;
+  const room = latestRoom;
+  const players = room.players || {};
+  const answers = room.answers || {};
+  const activePlayers = Object.keys(players).filter(id=>players[id].online!==false&&!players[id].eliminated);
+  // Submit 'none' for any unanswered
+  const updates = {};
+  activePlayers.forEach(id => { if (!answers[id]) updates[`rooms/${roomCode}/answers/${id}`] = 'none'; });
+  // Compute scores
+  const q = getQuestion(room);
+  activePlayers.forEach(id => {
+    const ans = answers[id] || 'none';
+    if (ans === q.correct) updates[`rooms/${roomCode}/players/${id}/score`] = (players[id].score||0) + 1;
+  });
+  updates[`rooms/${roomCode}/status`] = 'results';
+  db.ref().update(updates);
+}
+
+/* ── Render Question ───────────────────────────────────────────────────── */
+function getQuestion(room) {
+  if (room.isTiebreaker) {
+    return ALL_QUESTIONS[room.tiebreakerOrder[room.tiebreakerQIdx || 0]];
+  }
+  return ALL_QUESTIONS[room.questionOrder[room.currentQ]];
 }
 
 function renderQuestion(room) {
-  const qIndex = room.questionOrder[room.currentQ];
-  const q = ALL_QUESTIONS[qIndex];
-  const numEl = document.getElementById('question-number');
-  if (numEl.textContent === `Q${room.currentQ + 1} / ${TOTAL}`) return;
+  const key = qKey(room);
+  if (key === lastRenderedQKey) return;
+  lastRenderedQKey = key;
   hasAnswered = false;
+  clearInterval(timerIval);
+
+  const q = getQuestion(room);
+  const isTB = !!room.isTiebreaker;
+
   document.getElementById('waiting-panel').classList.remove('show');
-  document.getElementById('btn-a').classList.remove('selected');
-  document.getElementById('btn-b').classList.remove('selected');
-  document.getElementById('btn-a').disabled = false;
-  document.getElementById('btn-b').disabled = false;
-  const badge = document.getElementById('category-badge');
-  badge.textContent = CAT_LABELS[q.cat];
-  badge.className = 'category-badge ' + q.cat;
-  numEl.textContent = `Q${room.currentQ + 1} / ${TOTAL}`;
+  document.getElementById('waiting-title').textContent = 'Answer locked in!';
+  ['a','b','c'].forEach(x => {
+    const b = document.getElementById(`btn-${x}`);
+    b.classList.remove('selected','correct-reveal','wrong-reveal');
+    b.disabled = false;
+  });
+
+  document.getElementById('tiebreaker-banner').style.display = isTB ? 'block' : 'none';
+  document.getElementById('ri-round').textContent   = isTB ? '⚡ Tiebreaker' : `Round ${room.round} of ${ROUNDS}`;
+  document.getElementById('ri-q').textContent        = isTB ? `Q ${(room.tiebreakerQIdx||0)+1}` : `Q ${(room.roundQ||0)+1} / ${QS_PER_ROUND}`;
+  document.getElementById('question-number').textContent = isTB ? 'Sudden Death' : `${room.round}-${(room.roundQ||0)+1}`;
   document.getElementById('question-text').textContent = q.q;
-  document.getElementById('option-a-text').textContent = q.a;
-  document.getElementById('option-b-text').textContent = q.b;
-  document.getElementById('progress-bar').style.width = (room.currentQ / TOTAL * 100) + '%';
+  document.getElementById('option-a-text').textContent  = q.a;
+  document.getElementById('option-b-text').textContent  = q.b;
+  document.getElementById('option-c-text').textContent  = q.c;
+
+  if (room.questionStartedAt) startTimer(room.questionStartedAt);
 }
 
 function renderMiniScores(players) {
   const el = document.getElementById('mini-scores');
-  const entries = Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt);
-  el.innerHTML = entries.map(([id, p], i) => `
-    <div class="mini-score-chip">
+  const entries = Object.entries(players).sort((a,b)=>a[1].joinedAt-b[1].joinedAt);
+  el.innerHTML = entries.map(([id,p],i)=>`
+    <div class="mini-score-chip ${p.eliminated?'eliminated':''}">
       <div class="chip-dot" style="background:${playerColor(i)}"></div>
       <span>${p.name}</span>
       <span class="chip-score" style="color:${playerColor(i)}">${p.score}</span>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function renderAnswerWaiting(room) {
   if (!hasAnswered) return;
   const players = room.players || {};
   const answers = room.answers || {};
-  const onlinePlayers = Object.entries(players).filter(([,p]) => p.online !== false);
-  document.getElementById('answered-chips').innerHTML = onlinePlayers
-    .sort((a, b) => a[1].joinedAt - b[1].joinedAt)
-    .map(([id, p]) => `<span class="answered-chip ${answers[id] ? '' : 'pending'}">${answers[id] ? '✓' : '…'} ${p.name}</span>`).join('');
+  const active = Object.entries(players).filter(([,p])=>p.online!==false&&!p.eliminated);
+  document.getElementById('answered-chips').innerHTML = active
+    .sort((a,b)=>a[1].joinedAt-b[1].joinedAt)
+    .map(([id,p])=>`<span class="answered-chip ${answers[id]?'':'pending'}">${answers[id]?'✓':'…'} ${p.name}</span>`).join('');
 }
 
+/* ── Submit Answer ─────────────────────────────────────────────────────── */
 async function submitAnswer(option) {
   if (hasAnswered) return;
   hasAnswered = true;
-  document.getElementById(`btn-${option.toLowerCase()}`).classList.add('selected');
-  document.getElementById('btn-a').disabled = true;
-  document.getElementById('btn-b').disabled = true;
+  document.getElementById(`btn-${option}`).classList.add('selected');
+  ['a','b','c'].forEach(x => document.getElementById(`btn-${x}`).disabled = true);
+  document.getElementById('waiting-title').textContent = 'Answer locked in!';
   document.getElementById('waiting-panel').classList.add('show');
   await db.ref(`rooms/${roomCode}/answers/${myId}`).set(option);
 }
 
+/* ── Check All Answered ────────────────────────────────────────────────── */
 function checkAllAnswered(room) {
-  if (!hasAnswered) return;
+  if (!isHost) return;
+  if (room.status !== 'question') return;
+  const key = qKey(room);
+  if (key === lastAdvancedQKey) return;
   const players = room.players || {};
   const answers = room.answers || {};
-  const onlinePlayers = Object.keys(players).filter(id => players[id].online !== false);
-  const answeredCount = onlinePlayers.filter(id => answers[id]).length;
-  if (answeredCount >= onlinePlayers.length && onlinePlayers.length >= 1) {
-    const scoreUpdates = computeScores(players, answers);
-    const updates = {};
-    for (const [id, pts] of Object.entries(scoreUpdates)) {
-      updates[`rooms/${roomCode}/players/${id}/score`] = (players[id].score || 0) + pts;
+  const active = Object.keys(players).filter(id=>players[id].online!==false&&!players[id].eliminated);
+  const answered = active.filter(id=>!!answers[id]);
+  if (answered.length >= active.length && active.length >= 1) {
+    lastAdvancedQKey = key;
+    clearTimeout(hostAdvTimeout);
+    advanceToResults(room);
+  }
+}
+
+function advanceToResults(room) {
+  const players = room.players || {};
+  const answers = room.answers || {};
+  const q = getQuestion(room);
+  const updates = {};
+  // Award points
+  Object.keys(players).forEach(id => {
+    if (players[id].online!==false && !players[id].eliminated) {
+      if ((answers[id]||'').toLowerCase() === q.correct.toLowerCase()) {
+        updates[`rooms/${roomCode}/players/${id}/score`] = (players[id].score||0) + 1;
+      }
     }
-    updates[`rooms/${roomCode}/status`] = 'results';
-    db.ref().update(updates);
-  }
+  });
+  updates[`rooms/${roomCode}/status`] = 'results';
+  db.ref().update(updates);
 }
 
-function computeScores(players, answers) {
-  const onlineIds = Object.keys(players).filter(id => players[id].online !== false);
-  const countA = onlineIds.filter(id => answers[id] === 'A').length;
-  const countB = onlineIds.filter(id => answers[id] === 'B').length;
-  const pts = {};
-  onlineIds.forEach(id => { pts[id] = 0; });
-  if (countA === 0 || countB === 0) return pts;
-  if (countA === countB) { onlineIds.forEach(id => { pts[id] = 1; }); }
-  else {
-    const minorityAnswer = countA < countB ? 'A' : 'B';
-    onlineIds.filter(id => answers[id] === minorityAnswer).forEach(id => { pts[id] = 1; });
-  }
-  return pts;
-}
-
+/* ── Render Results ────────────────────────────────────────────────────── */
 function renderResults(room) {
-  const players = room.players || {};
-  const answers = room.answers || {};
-  const q = ALL_QUESTIONS[room.questionOrder[room.currentQ]];
-  const onlineIds = Object.keys(players).filter(id => players[id].online !== false);
-  const countA = onlineIds.filter(id => answers[id] === 'A').length;
-  const countB = onlineIds.filter(id => answers[id] === 'B').length;
-  const scorePts = computeScores(players, answers);
-  const anyPoints = Object.values(scorePts).some(p => p > 0);
-  let rEmoji, rTitle, rSub;
-  if (countA === 0 || countB === 0) { rEmoji = '🤝'; rTitle = 'Everyone agreed!'; rSub = 'No bold choices this round — no points scored.'; }
-  else if (countA === countB) { rEmoji = '⚖️'; rTitle = "It's a tie!"; rSub = 'Perfect split — everyone earns a point!'; }
-  else {
-    const minority = countA < countB ? 'A' : 'B';
-    const minorityText = minority === 'A' ? q.a : q.b;
-    rEmoji = '⚡'; rTitle = 'Minority wins!';
-    rSub = `The bold choice: "${minorityText.substring(0, 50)}${minorityText.length > 50 ? '…' : ''}"`;
-  }
-  document.getElementById('r-emoji').textContent = rEmoji;
-  document.getElementById('r-title').textContent = rTitle;
-  document.getElementById('r-sub').textContent = rSub;
+  clearInterval(timerIval);
+  clearTimeout(hostAdvTimeout);
+  const players  = room.players || {};
+  const answers  = room.answers || {};
+  const q        = getQuestion(room);
+  const isTB     = !!room.isTiebreaker;
+  const active   = Object.keys(players).filter(id=>players[id].online!==false&&!players[id].eliminated);
+  const correct  = q.correct;
+  const correctCount = active.filter(id=>(answers[id]||'').toLowerCase()===correct).length;
+  const nooneRight   = correctCount === 0;
+
+  document.getElementById('r-emoji').textContent = nooneRight ? '😬' : correctCount===active.length ? '🎊' : '✅';
+  document.getElementById('r-title').textContent = nooneRight ? 'Nobody got it!' : correctCount===active.length ? 'Everyone got it right!' : `${correctCount} / ${active.length} correct!`;
+  document.getElementById('r-sub').textContent   = nooneRight ? 'Better luck next question!' : ``;
+  document.getElementById('correct-answer-text').textContent = `(${correct.toUpperCase()}) ${q[correct]}`;
+
   const colorMap = {};
-  Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt).forEach(([id], i) => { colorMap[id] = playerColor(i); });
-  const entries = onlineIds.map(id => ({ id, p: players[id], ans: answers[id], pt: scorePts[id] || 0 })).sort((a, b) => a.p.joinedAt - b.p.joinedAt);
-  document.getElementById('results-list').innerHTML = entries.map(e => `
-    <div class="result-row ${e.pt > 0 ? 'got-point' : ''}">
+  Object.entries(players).sort((a,b)=>a[1].joinedAt-b[1].joinedAt).forEach(([id],i)=>{ colorMap[id]=playerColor(i); });
+  const entries = active.map(id=>({ id, p:players[id], ans:answers[id]||'none', got:(answers[id]||'').toLowerCase()===correct })).sort((a,b)=>a.p.joinedAt-b.p.joinedAt);
+  const badgeClass = { a:'a-badge', b:'b-badge', c:'c-badge', none:'none-badge' };
+  document.getElementById('results-list').innerHTML = entries.map(e=>`
+    <div class="result-row ${e.got?'got-point':''}">
       <div class="result-dot" style="background:${colorMap[e.id]}"></div>
-      <span class="result-name">${e.p.name}${e.id === myId ? ' (you)' : ''}</span>
-      <span class="result-answer-badge ${e.ans === 'A' ? 'a-badge' : 'b-badge'}">${e.ans === 'A' ? '🅰️' : '🅱️'}</span>
-      ${e.pt > 0 ? '<span class="result-point-tag">+1 ⭐</span>' : ''}
-    </div>
-  `).join('');
+      <span class="result-name">${e.p.name}${e.id===myId?' (you)':''}</span>
+      <span class="result-answer-badge ${badgeClass[e.ans]||'none-badge'}">${e.ans==='none'?'⏱ No answer':e.ans.toUpperCase()}</span>
+      ${e.got ? '<span class="result-point-tag">+1 ⭐</span>' : ''}
+    </div>`).join('');
+
+  // Determine next-button label
+  let nextLabel;
+  if (isTB) {
+    nextLabel = 'Next Tiebreaker ➡️';
+  } else {
+    const isLastInRound = (room.roundQ || 0) === QS_PER_ROUND - 1;
+    nextLabel = isLastInRound ? 'See Round Results 🔔' : 'Next Question ➡️';
+  }
+  document.getElementById('next-btn').textContent = nextLabel;
   document.getElementById('host-next-area').style.display = isHost ? 'block' : 'none';
-  document.getElementById('guest-next-area').style.display = isHost ? 'none' : 'block';
-  if (anyPoints) setTimeout(() => celebrateDance('Minority wins! +1 point ⭐'), 300);
+  document.getElementById('guest-next-area').style.display = isHost ? 'none'  : 'block';
+  if (correctCount > 0) setTimeout(()=>celebrateDance(`+${correctCount} point${correctCount>1?'s':''}! ⭐`), 300);
 }
 
+/* ── Host: Next Question ────────────────────────────────────────────────── */
 function hostNextQuestion() {
-  db.ref(`rooms/${roomCode}`).once('value').then(snap => {
-    const room = snap.val();
-    const nextQ = (room.currentQ || 0) + 1;
-    if (nextQ >= TOTAL) { db.ref(`rooms/${roomCode}/status`).set('gameover'); }
-    else { db.ref(`rooms/${roomCode}`).update({ currentQ: nextQ, answers: null, status: 'question' }); }
+  if (!latestRoom) return;
+  const room = latestRoom;
+
+  if (room.isTiebreaker) {
+    // Check if tiebreaker resolved
+    const tbPlayers = Object.keys(room.tiebreakerPlayers || {});
+    const answers   = room.answers || {};
+    const players   = room.players || {};
+    const q         = getQuestion(room);
+    const winners   = tbPlayers.filter(id => (answers[id]||'').toLowerCase() === q.correct);
+    if (winners.length === 1) {
+      // Clear winner
+      db.ref(`rooms/${roomCode}/status`).set('gameover');
+      return;
+    }
+    // Still tied — next tiebreaker question
+    const nextTBIdx = (room.tiebreakerQIdx || 0) + 1;
+    if (nextTBIdx >= (room.tiebreakerOrder||[]).length) {
+      // Out of tiebreaker questions — call it a draw, go to gameover
+      db.ref(`rooms/${roomCode}/status`).set('gameover');
+      return;
+    }
+    db.ref(`rooms/${roomCode}`).update({ tiebreakerQIdx: nextTBIdx, answers: null, questionStartedAt: firebase.database.ServerValue.TIMESTAMP });
+    return;
+  }
+
+  const roundQ = room.roundQ || 0;
+  const round  = room.round  || 1;
+
+  if (roundQ < QS_PER_ROUND - 1) {
+    // Next question in this round
+    const nextRoundQ = roundQ + 1;
+    const nextQ      = (round - 1) * QS_PER_ROUND + nextRoundQ;
+    db.ref(`rooms/${roomCode}`).update({
+      roundQ: nextRoundQ, currentQ: nextQ, answers: null,
+      status: 'question', questionStartedAt: firebase.database.ServerValue.TIMESTAMP
+    });
+  } else {
+    // Round is over — compute elimination
+    computeRoundOver(room);
+  }
+}
+
+/* ── Round Over Logic ───────────────────────────────────────────────────── */
+function computeRoundOver(room) {
+  const players = room.players || {};
+  const active  = Object.keys(players).filter(id => !players[id].eliminated);
+  // Find lowest score among active
+  const minScore = Math.min(...active.map(id => players[id].score));
+  const toElim   = active.filter(id => players[id].score === minScore);
+  const updates  = {};
+  toElim.forEach(id => { updates[`rooms/${roomCode}/players/${id}/eliminated`] = true; });
+  updates[`rooms/${roomCode}/status`] = 'round_over';
+  db.ref().update(updates);
+}
+
+/* ── Render Round Over ──────────────────────────────────────────────────── */
+function renderRoundOver(room) {
+  const players = room.players || {};
+  const round   = room.round || 1;
+  const entries = Object.entries(players).sort((a,b)=>b[1].score-a[1].score||a[1].joinedAt-b[1].joinedAt);
+  const colorMap = {};
+  Object.entries(players).sort((a,b)=>a[1].joinedAt-b[1].joinedAt).forEach(([id],i)=>{ colorMap[id]=playerColor(i); });
+
+  document.getElementById('ro-title').textContent = `Round ${round} Complete!`;
+  document.getElementById('ro-sub').textContent   = `Scores after ${round * QS_PER_ROUND} questions`;
+
+  const maxScore = Math.max(...entries.map(([,p])=>p.score));
+  document.getElementById('round-score-table').innerHTML = entries.map(([id,p])=>`
+    <div class="score-row ${p.eliminated?'eliminated-row':p.score===maxScore?'top-score':''}">
+      <div class="sr-dot" style="background:${colorMap[id]}"></div>
+      <span class="sr-name">${p.name}${id===myId?' (you)':''}${p.eliminated?' ❌':''}</span>
+      <span class="sr-pts" style="color:${colorMap[id]}">${p.score}</span>
+    </div>`).join('');
+
+  // Show eliminated
+  const eliminated = entries.filter(([,p])=>p.eliminated).map(([,p])=>p.name);
+  document.getElementById('elim-names').textContent = eliminated.join(', ');
+  const remaining = entries.filter(([,p])=>!p.eliminated).length;
+  document.getElementById('elim-sub').textContent = remaining === 1
+    ? '🏆 One player remains — they win!'
+    : `${remaining} players continue to Round ${round+1}`;
+
+  // Update next-round button
+  const nextRound = round + 1;
+  document.getElementById('next-round-btn').textContent =
+    remaining <= 1 ? 'See Final Results 🏆' :
+    nextRound > ROUNDS ? 'See Final Results 🏆' : `Start Round ${nextRound} ⚽`;
+  document.getElementById('host-next-round-area').style.display = isHost ? 'block' : 'none';
+  document.getElementById('guest-next-round-area').style.display = isHost ? 'none'  : 'block';
+}
+
+/* ── Host: Start Next Round ─────────────────────────────────────────────── */
+function hostStartNextRound() {
+  if (!latestRoom) return;
+  const room    = latestRoom;
+  const players = room.players || {};
+  const active  = Object.keys(players).filter(id => !players[id].eliminated);
+  const round   = room.round || 1;
+
+  if (active.length <= 1 || round >= ROUNDS) {
+    // Check for tiebreaker
+    const scores    = active.map(id => players[id].score);
+    const maxScore  = Math.max(...scores);
+    const tied      = active.filter(id => players[id].score === maxScore);
+    if (active.length > 1 && tied.length > 1) {
+      // Tiebreaker
+      const tbPlayers = tied.reduce((obj,id)=>({...obj,[id]:true}),{});
+      db.ref(`rooms/${roomCode}`).update({
+        status:'question', isTiebreaker:true, tiebreakerQIdx:0,
+        tiebreakerPlayers: tbPlayers, answers:null,
+        questionStartedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    } else {
+      db.ref(`rooms/${roomCode}/status`).set('gameover');
+    }
+    return;
+  }
+
+  // Start next round
+  const nextRound = round + 1;
+  const nextQ     = (nextRound - 1) * QS_PER_ROUND;
+  db.ref(`rooms/${roomCode}`).update({
+    round: nextRound, roundQ: 0, currentQ: nextQ,
+    answers: null, status: 'question',
+    questionStartedAt: firebase.database.ServerValue.TIMESTAMP
   });
 }
 
+/* ── Game Over ──────────────────────────────────────────────────────────── */
 function renderGameOver(players) {
-  const entries = Object.entries(players).sort((a, b) => b[1].score - a[1].score || a[1].joinedAt - b[1].joinedAt);
+  clearInterval(timerIval);
+  clearTimeout(hostAdvTimeout);
+  const room    = latestRoom || {};
+  const entries = Object.entries(players).sort((a,b)=>b[1].score-a[1].score||a[1].joinedAt-b[1].joinedAt);
   const colorMap = {};
-  Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt).forEach(([id], i) => { colorMap[id] = playerColor(i); });
-  const rankEmojis = ['🥇','🥈','🥉'];
-  let rank = 1, prevScore = null;
-  document.getElementById('leaderboard').innerHTML = entries.map(([id, p], i) => {
-    if (p.score !== prevScore) { rank = i + 1; prevScore = p.score; }
-    return `
-      <div class="lb-row ${rank === 1 ? 'lb-winner' : ''}">
-        <span class="lb-rank">${rankEmojis[rank - 1] || rank}</span>
-        <div class="lb-dot" style="background:${colorMap[id]}"></div>
-        <span class="lb-name">${p.name}${id === myId ? ' (you)' : ''}</span>
-        <span class="lb-score" style="color:${colorMap[id]}">${p.score}</span>
-      </div>`;
-  }).join('');
-  const winner = entries[0];
-  if (winner) {
-    if (entries[0][1].score === entries[1]?.score) {
-      document.getElementById('winner-text').textContent = "It's a Tie!";
-      document.getElementById('winner-sub').textContent = "You all think alike!";
-    } else {
-      document.getElementById('winner-text').textContent = `${winner[1].name} wins! 🏆`;
-      document.getElementById('winner-sub').textContent = "Most minority answers wins!";
-    }
+  Object.entries(players).sort((a,b)=>a[1].joinedAt-b[1].joinedAt).forEach(([id],i)=>{ colorMap[id]=playerColor(i); });
+
+  // If tiebreaker happened, find who won
+  let overallWinner = null;
+  if (room.isTiebreaker && room.tiebreakerPlayers) {
+    const tbPlayers = Object.keys(room.tiebreakerPlayers);
+    const answers   = room.answers || {};
+    const q         = getQuestion(room);
+    const tbWinners = tbPlayers.filter(id=>(answers[id]||'').toLowerCase()===q.correct);
+    if (tbWinners.length === 1) overallWinner = tbWinners[0];
   }
+
+  const rankEmojis = ['🥇','🥈','🥉'];
+  let rank=1, prevScore=null;
+  document.getElementById('leaderboard').innerHTML = entries.map(([id,p],i)=>{
+    if(p.score!==prevScore){rank=i+1;prevScore=p.score;}
+    const isWinner = overallWinner ? id===overallWinner : rank===1;
+    return `<div class="lb-row ${isWinner?'lb-winner':''} ${p.eliminated&&!isWinner?'lb-eliminated':''}">
+      <span class="lb-rank">${rankEmojis[rank-1]||rank}</span>
+      <div class="lb-dot" style="background:${colorMap[id]}"></div>
+      <span class="lb-name">${p.name}${id===myId?' (you)':''}</span>
+      <span class="lb-score" style="color:${colorMap[id]}">${p.score}</span>
+    </div>`;
+  }).join('');
+
+  const active   = entries.filter(([,p])=>!p.eliminated);
+  const topScore = active.length > 0 ? active[0][1].score : entries[0][1].score;
+  const topPlayers = entries.filter(([,p])=>p.score===topScore);
+
+  if (overallWinner) {
+    document.getElementById('winner-text').textContent = `${players[overallWinner].name} wins! 🏆`;
+    document.getElementById('winner-sub').textContent  = 'Tiebreaker champion!';
+  } else if (topPlayers.length > 1) {
+    document.getElementById('winner-text').textContent = "It's a Tie! 🏆";
+    document.getElementById('winner-sub').textContent  = topPlayers.map(([,p])=>p.name).join(' & ');
+  } else {
+    document.getElementById('winner-text').textContent = `${topPlayers[0][1].name} wins! 🏆`;
+    document.getElementById('winner-sub').textContent  = `${topScore} correct answer${topScore!==1?'s':''}!`;
+  }
+  setTimeout(()=>celebrateDance('Champion! 🏆'), 400);
 }
 
+/* ── Restart ────────────────────────────────────────────────────────────── */
 function restartToHome() {
+  clearInterval(timerIval); clearTimeout(hostAdvTimeout);
   if (roomRef) { roomRef.off(); roomRef = null; }
   if (isHost) db.ref(`rooms/${roomCode}`).remove();
-  roomCode = ''; isHost = false; hasAnswered = false;
+  roomCode=''; isHost=false; hasAnswered=false; latestRoom=null;
+  lastRenderedQKey=''; lastAdvancedQKey='';
   document.getElementById('my-name').value = '';
   showScreen('home-screen');
 }
 
-(function checkUrlRoom() {
+/* ── URL pre-fill ───────────────────────────────────────────────────────── */
+(function checkUrlRoom(){
   const params = new URLSearchParams(location.search);
   const roomParam = params.get('room');
-  if (roomParam) {
-    document.getElementById('join-code').value = roomParam.toUpperCase();
-    document.getElementById('my-name').focus();
-  }
+  if (roomParam) { document.getElementById('join-code').value = roomParam.toUpperCase(); document.getElementById('my-name').focus(); }
 })();
 
 document.getElementById('my-name').addEventListener('keyup', e => {
-  if (e.key === 'Enter') {
-    const code = document.getElementById('join-code').value.trim();
-    if (code.length === 4) joinGame(); else createGame();
-  }
+  if (e.key==='Enter') { const code=document.getElementById('join-code').value.trim(); if(code.length===4) joinGame(); else createGame(); }
 });
 document.getElementById('join-code').addEventListener('keyup', e => {
-  if (e.key === 'Enter') joinGame();
+  if (e.key==='Enter') joinGame();
   e.target.value = e.target.value.toUpperCase();
 });
 </script>
-
 </body>
 </html>
