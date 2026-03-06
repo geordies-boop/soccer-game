@@ -383,6 +383,128 @@
 
     .card { animation: fadeIn 0.3s ease; }
 
+    /* Instructions box */
+    .instructions-box {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 18px 18px 16px;
+      margin-bottom: 4px;
+    }
+
+    .instructions-box h3 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #ffd166;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .instructions-box ol {
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .instructions-box li {
+      font-size: 0.88rem;
+      color: #cdd9e8;
+      line-height: 1.45;
+    }
+
+    .instructions-box li strong {
+      color: #fff;
+    }
+
+    .scoring-note {
+      margin-top: 12px;
+      background: rgba(247,37,133,0.12);
+      border: 1px solid rgba(247,37,133,0.25);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      color: #f9a8d0;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    /* Dancing emoji overlay */
+    #dance-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      pointer-events: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #dance-overlay.show { display: flex; }
+
+    .dance-burst {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: dancePop 1.1s ease forwards;
+    }
+
+    .dance-emoji {
+      font-size: 5.5rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 24px rgba(247,37,133,0.8));
+      animation: danceWiggle 0.35s ease infinite alternate;
+    }
+
+    .dance-label {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffd166;
+      text-shadow: 0 0 16px rgba(255,209,102,0.9);
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes danceWiggle {
+      from { transform: rotate(-14deg) scale(1); }
+      to   { transform: rotate(14deg) scale(1.12); }
+    }
+
+    @keyframes dancePop {
+      0%   { opacity: 0; transform: scale(0.4) translateY(40px); }
+      20%  { opacity: 1; transform: scale(1.15) translateY(0); }
+      75%  { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.85) translateY(-20px); }
+    }
+
+    .confetti-bg {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(247,37,133,0.18) 0%, transparent 70%);
+      animation: confettiFade 1.1s ease forwards;
+    }
+
+    @keyframes confettiFade {
+      0%   { opacity: 0; }
+      20%  { opacity: 1; }
+      75%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* Score pop animation */
+    @keyframes scorePop {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.6); color: #ffd166; }
+      100% { transform: scale(1); }
+    }
+
+    .score-popping { animation: scorePop 0.5s ease; }
+
     .progress-bar-wrap {
       width: 100%;
       max-width: 400px;
@@ -411,7 +533,21 @@
 <!-- SETUP SCREEN -->
 <div id="setup-screen">
   <h2>Who's playing? 🎉</h2>
-  <p>Enter your names to get started!</p>
+  <p>The ultimate carpool game for soccer besties!</p>
+
+  <div class="instructions-box">
+    <h3>📋 How to Play</h3>
+    <ol>
+      <li><strong>Enter both players' names</strong> below and tap <em>Let's Play!</em></li>
+      <li>Each round shows a <strong>Would You Rather</strong> question with two choices.</li>
+      <li><strong>Player 1</strong> secretly picks their answer — the screen hides it before Player 2 looks.</li>
+      <li><strong>Player 2</strong> then picks their answer.</li>
+      <li>If you both pick <strong>different answers</strong>, each player earns <strong>+1 point</strong> — and a special dance happens! 💃</li>
+      <li>If you both pick the <strong>same answer</strong>, no points — but it shows how alike you are! 🤝</li>
+      <li>After <strong>10 questions</strong>, the player with the most points wins! 🏆</li>
+    </ol>
+    <div class="scoring-note">⚡ Points reward bold, unique choices — dare to be different!</div>
+  </div>
 
   <span class="name-label">Player 1 🌸</span>
   <input class="name-input" id="name1" type="text" placeholder="Your name" maxlength="16" />
@@ -475,6 +611,15 @@
     <button class="btn btn-next" id="btn-next" style="display:none" onclick="nextQuestion(false)">Next Question ➡️</button>
   </div>
 
+</div>
+
+<!-- DANCING EMOJI OVERLAY -->
+<div id="dance-overlay">
+  <div class="confetti-bg"></div>
+  <div class="dance-burst">
+    <div class="dance-emoji" id="dance-emoji">💃</div>
+    <div class="dance-label" id="dance-label">+1 Point!</div>
+  </div>
 </div>
 
 <!-- GAME OVER SCREEN -->
@@ -671,6 +816,37 @@
     }
   }
 
+  const DANCE_EMOJIS = ['💃', '🕺', '💃', '🕺', '🎉', '✨', '🌟'];
+  let danceTimer = null;
+
+  function celebrateDance(playerNames) {
+    const overlay = document.getElementById('dance-overlay');
+    const emojiEl = document.getElementById('dance-emoji');
+    const labelEl = document.getElementById('dance-label');
+
+    // Pick a random dancing emoji
+    emojiEl.textContent = DANCE_EMOJIS[Math.floor(Math.random() * DANCE_EMOJIS.length)];
+    labelEl.textContent = `${playerNames} each earn +1 point! 🎊`;
+
+    // Reset animation by removing/re-adding class
+    overlay.classList.remove('show');
+    void overlay.offsetWidth; // force reflow
+    overlay.classList.add('show');
+
+    if (danceTimer) clearTimeout(danceTimer);
+    danceTimer = setTimeout(() => {
+      overlay.classList.remove('show');
+    }, 1150);
+  }
+
+  function popScore(elId) {
+    const el = document.getElementById(elId);
+    el.classList.remove('score-popping');
+    void el.offsetWidth;
+    el.classList.add('score-popping');
+    el.addEventListener('animationend', () => el.classList.remove('score-popping'), { once: true });
+  }
+
   function showResult() {
     const [c1, c2] = choices;
     const agree = c1 === c2;
@@ -692,12 +868,17 @@
       scores[1]++;
       document.getElementById('score1').textContent = scores[0];
       document.getElementById('score2').textContent = scores[1];
+      popScore('score1');
+      popScore('score2');
 
       document.getElementById('result-emoji').textContent = '⚡';
-      document.getElementById('result-text').textContent = 'Different answers!';
+      document.getElementById('result-text').textContent = 'Different answers — bold choices!';
       document.getElementById('result-sub').textContent =
         `${names[0]} picked ${emojis[choices[0]]}  •  ${names[1]} picked ${emojis[choices[1]]}`;
       document.getElementById('agree-banner').style.display = 'none';
+
+      // Trigger the dancing emoji celebration!
+      setTimeout(() => celebrateDance(`${names[0]} & ${names[1]}`), 200);
     }
 
     document.getElementById('btn-skip').style.display = 'none';
