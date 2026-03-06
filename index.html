@@ -6,7 +6,6 @@
   <title>⚽ Would You Rather?</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
@@ -19,27 +18,22 @@
       padding: 16px;
       padding-bottom: 32px;
     }
-
     header {
       text-align: center;
       margin-bottom: 16px;
       padding-top: 12px;
     }
-
     header h1 {
       font-size: 1.8rem;
       font-weight: 900;
       letter-spacing: -0.5px;
       color: #fff;
     }
-
     header p {
       font-size: 0.85rem;
       color: #a0b4d0;
       margin-top: 4px;
     }
-
-    /* Score bar */
     .scoreboard {
       display: flex;
       justify-content: space-around;
@@ -52,43 +46,35 @@
       margin-bottom: 20px;
       border: 1px solid rgba(255,255,255,0.12);
     }
-
     .player {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
     }
-
     .player-label {
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #a0b4d0;
     }
-
     .player-name {
       font-size: 0.95rem;
       font-weight: 700;
       color: #fff;
     }
-
     .player-score {
       font-size: 2rem;
       font-weight: 900;
       line-height: 1;
     }
-
     .player-1 .player-score { color: #f72585; }
     .player-2 .player-score { color: #4cc9f0; }
-
     .vs {
       font-size: 1.1rem;
       font-weight: 900;
       color: #ffd166;
     }
-
-    /* Turn indicator */
     .turn-banner {
       width: 100%;
       max-width: 400px;
@@ -99,11 +85,8 @@
       border-radius: 10px;
       margin-bottom: 16px;
     }
-
     .turn-banner.p1 { background: rgba(247,37,133,0.2); color: #f72585; border: 1px solid rgba(247,37,133,0.4); }
     .turn-banner.p2 { background: rgba(76,201,240,0.2); color: #4cc9f0; border: 1px solid rgba(76,201,240,0.4); }
-
-    /* Card */
     .card {
       width: 100%;
       max-width: 400px;
@@ -114,7 +97,6 @@
       margin-bottom: 16px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
-
     .card-header {
       padding: 14px 20px 10px;
       display: flex;
@@ -122,7 +104,6 @@
       align-items: center;
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-
     .category-badge {
       font-size: 0.72rem;
       font-weight: 700;
@@ -131,17 +112,14 @@
       padding: 4px 10px;
       border-radius: 20px;
     }
-
     .category-badge.soccer { background: rgba(76,201,240,0.2); color: #4cc9f0; border: 1px solid rgba(76,201,240,0.3); }
     .category-badge.life   { background: rgba(247,37,133,0.2); color: #f72585; border: 1px solid rgba(247,37,133,0.3); }
     .category-badge.funny  { background: rgba(255,209,102,0.2); color: #ffd166; border: 1px solid rgba(255,209,102,0.3); }
     .category-badge.tough  { background: rgba(6,214,160,0.2);  color: #06d6a0; border: 1px solid rgba(6,214,160,0.3); }
-
     .question-number {
       font-size: 0.78rem;
       color: #a0b4d0;
     }
-
     .question-text {
       padding: 20px 20px 16px;
       font-size: 1.05rem;
@@ -149,14 +127,12 @@
       line-height: 1.45;
       text-align: center;
     }
-
     .options {
       display: flex;
       flex-direction: column;
       gap: 10px;
       padding: 0 16px 20px;
     }
-
     .option-btn {
       width: 100%;
       padding: 16px;
@@ -173,9 +149,7 @@
       align-items: center;
       gap: 10px;
     }
-
     .option-btn .icon { font-size: 1.3rem; flex-shrink: 0; }
-
     .option-a {
       background: rgba(247,37,133,0.12);
       border-color: rgba(247,37,133,0.3);
@@ -186,7 +160,6 @@
       border-color: #f72585;
       transform: scale(0.98);
     }
-
     .option-b {
       background: rgba(76,201,240,0.12);
       border-color: rgba(76,201,240,0.3);
@@ -197,8 +170,6 @@
       border-color: #4cc9f0;
       transform: scale(0.98);
     }
-
-    /* Result overlay */
     .result-panel {
       display: none;
       width: 100%;
@@ -211,13 +182,10 @@
       margin-bottom: 16px;
       animation: fadeIn 0.25s ease;
     }
-
     .result-panel.show { display: block; }
-
     .result-emoji { font-size: 3rem; margin-bottom: 8px; }
     .result-text  { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
     .result-sub   { font-size: 0.82rem; color: #a0b4d0; }
-
     .agree-banner {
       background: rgba(6,214,160,0.15);
       border: 1px solid rgba(6,214,160,0.4);
@@ -228,15 +196,12 @@
       font-size: 0.88rem;
       font-weight: 600;
     }
-
-    /* Next / action buttons */
     .action-row {
       display: flex;
       gap: 10px;
       width: 100%;
       max-width: 400px;
     }
-
     .btn {
       flex: 1;
       padding: 15px;
@@ -248,21 +213,16 @@
       transition: all 0.18s ease;
       -webkit-tap-highlight-color: transparent;
     }
-
     .btn:active { transform: scale(0.96); }
-
     .btn-next {
       background: linear-gradient(135deg, #f72585, #b5179e);
       color: white;
     }
-
     .btn-skip {
       background: rgba(255,255,255,0.08);
       color: #a0b4d0;
       border: 1px solid rgba(255,255,255,0.12);
     }
-
-    /* Name setup screen */
     #setup-screen {
       display: flex;
       flex-direction: column;
@@ -272,19 +232,16 @@
       max-width: 360px;
       padding-top: 20px;
     }
-
     #setup-screen h2 {
       font-size: 1.4rem;
       font-weight: 800;
       text-align: center;
     }
-
     #setup-screen p {
       font-size: 0.88rem;
       color: #a0b4d0;
       text-align: center;
     }
-
     .name-input {
       width: 100%;
       padding: 14px 16px;
@@ -296,10 +253,8 @@
       outline: none;
       transition: border-color 0.2s;
     }
-
     .name-input::placeholder { color: #607080; }
     .name-input:focus { border-color: #f72585; }
-
     .name-label {
       font-size: 0.78rem;
       font-weight: 600;
@@ -309,7 +264,6 @@
       align-self: flex-start;
       margin-bottom: -8px;
     }
-
     .btn-start {
       width: 100%;
       padding: 16px;
@@ -323,8 +277,6 @@
       margin-top: 8px;
       -webkit-tap-highlight-color: transparent;
     }
-
-    /* Game over screen */
     #gameover-screen {
       display: none;
       flex-direction: column;
@@ -334,20 +286,16 @@
       max-width: 400px;
       text-align: center;
     }
-
     #gameover-screen.show { display: flex; }
-
     #gameover-screen .trophy { font-size: 4rem; }
     #gameover-screen h2 { font-size: 1.6rem; font-weight: 900; }
     #gameover-screen p { font-size: 0.95rem; color: #a0b4d0; }
-
     .final-scores {
       display: flex;
       gap: 16px;
       justify-content: center;
       width: 100%;
     }
-
     .final-score-card {
       flex: 1;
       background: rgba(255,255,255,0.06);
@@ -355,11 +303,9 @@
       padding: 16px;
       border: 1px solid rgba(255,255,255,0.1);
     }
-
     .final-score-card.winner { border-color: #ffd166; background: rgba(255,209,102,0.1); }
     .final-score-card .fn { font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; }
     .final-score-card .fs { font-size: 2.2rem; font-weight: 900; }
-
     .btn-restart {
       width: 100%;
       padding: 16px;
@@ -372,139 +318,13 @@
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
     }
-
     #game-screen { display: none; width: 100%; }
     #game-screen.show { display: flex; flex-direction: column; align-items: center; }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     .card { animation: fadeIn 0.3s ease; }
-
-    /* Instructions box */
-    .instructions-box {
-      width: 100%;
-      background: rgba(255,255,255,0.06);
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 18px 18px 16px;
-      margin-bottom: 4px;
-    }
-
-    .instructions-box h3 {
-      font-size: 0.95rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #ffd166;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .instructions-box ol {
-      padding-left: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .instructions-box li {
-      font-size: 0.88rem;
-      color: #cdd9e8;
-      line-height: 1.45;
-    }
-
-    .instructions-box li strong {
-      color: #fff;
-    }
-
-    .scoring-note {
-      margin-top: 12px;
-      background: rgba(247,37,133,0.12);
-      border: 1px solid rgba(247,37,133,0.25);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.82rem;
-      color: #f9a8d0;
-      line-height: 1.4;
-      text-align: center;
-    }
-
-    /* Dancing emoji overlay */
-    #dance-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      pointer-events: none;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #dance-overlay.show { display: flex; }
-
-    .dance-burst {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      animation: dancePop 1.1s ease forwards;
-    }
-
-    .dance-emoji {
-      font-size: 5.5rem;
-      line-height: 1;
-      filter: drop-shadow(0 0 24px rgba(247,37,133,0.8));
-      animation: danceWiggle 0.35s ease infinite alternate;
-    }
-
-    .dance-label {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #ffd166;
-      text-shadow: 0 0 16px rgba(255,209,102,0.9);
-      letter-spacing: 0.5px;
-    }
-
-    @keyframes danceWiggle {
-      from { transform: rotate(-14deg) scale(1); }
-      to   { transform: rotate(14deg) scale(1.12); }
-    }
-
-    @keyframes dancePop {
-      0%   { opacity: 0; transform: scale(0.4) translateY(40px); }
-      20%  { opacity: 1; transform: scale(1.15) translateY(0); }
-      75%  { opacity: 1; transform: scale(1) translateY(0); }
-      100% { opacity: 0; transform: scale(0.85) translateY(-20px); }
-    }
-
-    .confetti-bg {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(247,37,133,0.18) 0%, transparent 70%);
-      animation: confettiFade 1.1s ease forwards;
-    }
-
-    @keyframes confettiFade {
-      0%   { opacity: 0; }
-      20%  { opacity: 1; }
-      75%  { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* Score pop animation */
-    @keyframes scorePop {
-      0%   { transform: scale(1); }
-      40%  { transform: scale(1.6); color: #ffd166; }
-      100% { transform: scale(1); }
-    }
-
-    .score-popping { animation: scorePop 0.5s ease; }
-
     .progress-bar-wrap {
       width: 100%;
       max-width: 400px;
@@ -514,7 +334,6 @@
       margin-bottom: 14px;
       overflow: hidden;
     }
-
     .progress-bar-fill {
       height: 100%;
       background: linear-gradient(90deg, #f72585, #4cc9f0);
@@ -524,43 +343,22 @@
   </style>
 </head>
 <body>
-
 <header>
   <h1>⚽ Would You Rather?</h1>
   <p>The Soccer Carpool Game</p>
 </header>
-
 <!-- SETUP SCREEN -->
 <div id="setup-screen">
   <h2>Who's playing? 🎉</h2>
-  <p>The ultimate carpool game for soccer besties!</p>
-
-  <div class="instructions-box">
-    <h3>📋 How to Play</h3>
-    <ol>
-      <li><strong>Enter both players' names</strong> below and tap <em>Let's Play!</em></li>
-      <li>Each round shows a <strong>Would You Rather</strong> question with two choices.</li>
-      <li><strong>Player 1</strong> secretly picks their answer — the screen hides it before Player 2 looks.</li>
-      <li><strong>Player 2</strong> then picks their answer.</li>
-      <li>If you both pick <strong>different answers</strong>, each player earns <strong>+1 point</strong> — and a special dance happens! 💃</li>
-      <li>If you both pick the <strong>same answer</strong>, no points — but it shows how alike you are! 🤝</li>
-      <li>After <strong>10 questions</strong>, the player with the most points wins! 🏆</li>
-    </ol>
-    <div class="scoring-note">⚡ Points reward bold, unique choices — dare to be different!</div>
-  </div>
-
+  <p>Enter your names to get started!</p>
   <span class="name-label">Player 1 🌸</span>
   <input class="name-input" id="name1" type="text" placeholder="Your name" maxlength="16" />
-
   <span class="name-label">Player 2 💙</span>
   <input class="name-input" id="name2" type="text" placeholder="Teammate's name" maxlength="16" />
-
   <button class="btn-start" onclick="startGame()">Let's Play! ⚽</button>
 </div>
-
 <!-- GAME SCREEN -->
 <div id="game-screen">
-
   <div class="scoreboard">
     <div class="player player-1">
       <span class="player-label">Player 1</span>
@@ -574,13 +372,10 @@
       <span class="player-score" id="score2">0</span>
     </div>
   </div>
-
   <div class="progress-bar-wrap">
     <div class="progress-bar-fill" id="progress-bar"></div>
   </div>
-
   <div class="turn-banner p1" id="turn-banner">⬅️ Your turn!</div>
-
   <div class="card" id="question-card">
     <div class="card-header">
       <span class="category-badge" id="category-badge">Soccer</span>
@@ -598,30 +393,17 @@
       </button>
     </div>
   </div>
-
   <div class="result-panel" id="result-panel">
     <div class="result-emoji" id="result-emoji">🤔</div>
     <div class="result-text" id="result-text"></div>
     <div class="result-sub" id="result-sub"></div>
     <div class="agree-banner" id="agree-banner" style="display:none">🎉 You both picked the same thing!</div>
   </div>
-
   <div class="action-row">
     <button class="btn btn-skip" id="btn-skip" onclick="nextQuestion(true)">Skip</button>
     <button class="btn btn-next" id="btn-next" style="display:none" onclick="nextQuestion(false)">Next Question ➡️</button>
   </div>
-
 </div>
-
-<!-- DANCING EMOJI OVERLAY -->
-<div id="dance-overlay">
-  <div class="confetti-bg"></div>
-  <div class="dance-burst">
-    <div class="dance-emoji" id="dance-emoji">💃</div>
-    <div class="dance-label" id="dance-label">+1 Point!</div>
-  </div>
-</div>
-
 <!-- GAME OVER SCREEN -->
 <div id="gameover-screen">
   <div class="trophy" id="trophy-emoji">🏆</div>
@@ -640,7 +422,6 @@
   <p style="font-size:0.82rem; color:#a0b4d0;">Points = questions where you picked differently from each other!</p>
   <button class="btn-restart" onclick="restartGame()">🔄 Play Again!</button>
 </div>
-
 <script>
   const ALL_QUESTIONS = [
     // ⚽ SOCCER
@@ -659,7 +440,6 @@
     { cat: "soccer", q: "Would you rather...", a: "Score off a bicycle kick", b: "Score off an incredible volley" },
     { cat: "soccer", q: "Would you rather...", a: "Be superfast but can't shoot", b: "Have a perfect shot but be slow" },
     { cat: "soccer", q: "Would you rather...", a: "Play in the Olympics", b: "Play in the World Cup" },
-
     // 😂 FUNNY
     { cat: "funny", q: "Would you rather...", a: "Have to sing the national anthem before every soccer practice", b: "Have to do a cartwheel every time you score a goal" },
     { cat: "funny", q: "Would you rather...", a: "Wear your soccer jersey to school every single day for a year", b: "Carry a soccer ball everywhere you go for a month" },
@@ -669,7 +449,6 @@
     { cat: "funny", q: "Would you rather...", a: "Play soccer in a giant hamster ball", b: "Play soccer on a giant trampoline" },
     { cat: "funny", q: "Would you rather...", a: "Have a team mascot that follows you everywhere", b: "Have your team play with a square ball" },
     { cat: "funny", q: "Would you rather...", a: "Celebrate every goal with the worm dance", b: "Celebrate every goal with a dramatic fall to the ground" },
-
     // 🌸 LIFE
     { cat: "life", q: "Would you rather...", a: "Have a sleepover every weekend with your best friend", b: "Go on one amazing vacation every year with your family" },
     { cat: "life", q: "Would you rather...", a: "Only eat your favorite food for a month", b: "Try a new food every single day for a month" },
@@ -682,7 +461,6 @@
     { cat: "life", q: "Would you rather...", a: "Have a superpower you can never tell anyone about", b: "Be famous but have no superpower" },
     { cat: "life", q: "Would you rather...", a: "Always have the perfect weather", b: "Never have to worry about your hair" },
     { cat: "life", q: "Would you rather...", a: "Skip school for a week to travel somewhere cool", b: "Stay home for a week with unlimited movies and snacks" },
-
     // 💪 TOUGH CHOICE
     { cat: "tough", q: "Would you rather...", a: "Be really good at soccer but have a tough coach", b: "Be okay at soccer but have the most fun coach ever" },
     { cat: "tough", q: "Would you rather...", a: "Give up your phone for a month", b: "Give up your favorite sport for a month" },
@@ -692,19 +470,16 @@
     { cat: "tough", q: "Would you rather...", a: "Be great at school but bad at sports", b: "Be great at sports but struggle at school" },
     { cat: "tough", q: "Would you rather...", a: "Tell your coach a hard truth", b: "Stay quiet and let something unfair happen" },
   ];
-
   const CAT_LABELS = { soccer: "⚽ Soccer", funny: "😂 Funny", life: "🌸 Life", tough: "💪 Tough Choice" };
   const CAT_CLASSES = { soccer: "soccer", funny: "funny", life: "life", tough: "tough" };
-
   let names = ["Player 1", "Player 2"];
   let scores = [0, 0];
   let questions = [];
   let currentQ = 0;
-  let currentTurn = 0; // 0 = player 1's turn, 1 = player 2's turn
+  let currentTurn = 0;
   let choices = [null, null];
   let waitingForP2 = false;
   const TOTAL = 10;
-
   function shuffle(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -713,7 +488,6 @@
     }
     return a;
   }
-
   function startGame() {
     const n1 = document.getElementById('name1').value.trim() || "Player 1";
     const n2 = document.getElementById('name2').value.trim() || "Player 2";
@@ -724,53 +498,39 @@
     currentTurn = 0;
     choices = [null, null];
     waitingForP2 = false;
-
     document.getElementById('setup-screen').style.display = 'none';
     document.getElementById('game-screen').classList.add('show');
     document.getElementById('score-name1').textContent = n1;
     document.getElementById('score-name2').textContent = n2;
-
     loadQuestion();
   }
-
   function loadQuestion() {
     if (currentQ >= TOTAL) { showGameOver(); return; }
-
     const q = questions[currentQ];
     choices = [null, null];
     waitingForP2 = false;
     currentTurn = 0;
-
-    // Reset buttons
     document.getElementById('btn-a').classList.remove('selected');
     document.getElementById('btn-b').classList.remove('selected');
     document.getElementById('btn-a').disabled = false;
     document.getElementById('btn-b').disabled = false;
-
-    // Hide result
     document.getElementById('result-panel').classList.remove('show');
     document.getElementById('btn-next').style.display = 'none';
     document.getElementById('btn-skip').style.display = 'inline-block';
-
-    // Populate
     const badge = document.getElementById('category-badge');
     badge.textContent = CAT_LABELS[q.cat];
     badge.className = 'category-badge ' + CAT_CLASSES[q.cat];
-
     document.getElementById('question-number').textContent = `Q${currentQ + 1} / ${TOTAL}`;
     document.getElementById('question-text').textContent = q.q;
     document.getElementById('option-a-text').textContent = q.a;
     document.getElementById('option-b-text').textContent = q.b;
-
     updateProgress();
     updateTurnBanner();
   }
-
   function updateProgress() {
     const pct = (currentQ / TOTAL) * 100;
     document.getElementById('progress-bar').style.width = pct + '%';
   }
-
   function updateTurnBanner() {
     const banner = document.getElementById('turn-banner');
     const name = names[currentTurn];
@@ -782,20 +542,15 @@
       banner.textContent = `💙 ${name}'s turn — pick one!`;
     }
   }
-
   function choose(option) {
     if (waitingForP2 === false && currentTurn === 0) {
-      // Player 1 picks
       choices[0] = option;
       document.getElementById('btn-a').classList.toggle('selected', option === 'A');
       document.getElementById('btn-b').classList.toggle('selected', option === 'B');
       document.getElementById('btn-a').disabled = true;
       document.getElementById('btn-b').disabled = true;
-
       waitingForP2 = true;
       currentTurn = 1;
-
-      // Brief pause then reset for P2
       setTimeout(() => {
         document.getElementById('btn-a').classList.remove('selected');
         document.getElementById('btn-b').classList.remove('selected');
@@ -803,106 +558,55 @@
         document.getElementById('btn-b').disabled = false;
         updateTurnBanner();
       }, 700);
-
     } else if (waitingForP2 && currentTurn === 1) {
-      // Player 2 picks
       choices[1] = option;
       document.getElementById('btn-a').disabled = true;
       document.getElementById('btn-b').disabled = true;
       document.getElementById('btn-a').classList.toggle('selected', option === 'A');
       document.getElementById('btn-b').classList.toggle('selected', option === 'B');
-
       showResult();
     }
   }
-
-  const DANCE_EMOJIS = ['💃', '🕺', '💃', '🕺', '🎉', '✨', '🌟'];
-  let danceTimer = null;
-
-  function celebrateDance(playerNames) {
-    const overlay = document.getElementById('dance-overlay');
-    const emojiEl = document.getElementById('dance-emoji');
-    const labelEl = document.getElementById('dance-label');
-
-    // Pick a random dancing emoji
-    emojiEl.textContent = DANCE_EMOJIS[Math.floor(Math.random() * DANCE_EMOJIS.length)];
-    labelEl.textContent = `${playerNames} each earn +1 point! 🎊`;
-
-    // Reset animation by removing/re-adding class
-    overlay.classList.remove('show');
-    void overlay.offsetWidth; // force reflow
-    overlay.classList.add('show');
-
-    if (danceTimer) clearTimeout(danceTimer);
-    danceTimer = setTimeout(() => {
-      overlay.classList.remove('show');
-    }, 1150);
-  }
-
-  function popScore(elId) {
-    const el = document.getElementById(elId);
-    el.classList.remove('score-popping');
-    void el.offsetWidth;
-    el.classList.add('score-popping');
-    el.addEventListener('animationend', () => el.classList.remove('score-popping'), { once: true });
-  }
-
   function showResult() {
     const [c1, c2] = choices;
     const agree = c1 === c2;
     const q = questions[currentQ];
-
     const panel = document.getElementById('result-panel');
     panel.classList.add('show');
-
     const emojis = { A: '🅰️', B: '🅱️' };
-
     if (agree) {
       document.getElementById('result-emoji').textContent = '🤝';
       document.getElementById('result-text').textContent = 'You both agreed!';
       document.getElementById('result-sub').textContent = `Both picked: ${c1 === 'A' ? q.a : q.b}`;
       document.getElementById('agree-banner').style.display = 'block';
     } else {
-      // They disagreed — each gets a point
       scores[0]++;
       scores[1]++;
       document.getElementById('score1').textContent = scores[0];
       document.getElementById('score2').textContent = scores[1];
-      popScore('score1');
-      popScore('score2');
-
       document.getElementById('result-emoji').textContent = '⚡';
-      document.getElementById('result-text').textContent = 'Different answers — bold choices!';
+      document.getElementById('result-text').textContent = 'Different answers!';
       document.getElementById('result-sub').textContent =
         `${names[0]} picked ${emojis[choices[0]]}  •  ${names[1]} picked ${emojis[choices[1]]}`;
       document.getElementById('agree-banner').style.display = 'none';
-
-      // Trigger the dancing emoji celebration!
-      setTimeout(() => celebrateDance(`${names[0]} & ${names[1]}`), 200);
     }
-
     document.getElementById('btn-skip').style.display = 'none';
     document.getElementById('btn-next').style.display = 'inline-block';
   }
-
   function nextQuestion(skip) {
     currentQ++;
     loadQuestion();
   }
-
   function showGameOver() {
     document.getElementById('game-screen').classList.remove('show');
     const gs = document.getElementById('gameover-screen');
     gs.classList.add('show');
-
     const [s1, s2] = scores;
     const [n1, n2] = names;
-
     document.getElementById('final-name1').textContent = n1;
     document.getElementById('final-name2').textContent = n2;
     document.getElementById('final-score1').textContent = s1;
     document.getElementById('final-score2').textContent = s2;
-
     let trophy, winText, winSub;
     if (s1 === s2) {
       trophy = '🤝'; winText = "It's a Tie!";
@@ -920,12 +624,10 @@
       document.getElementById('final2').classList.add('winner');
       document.getElementById('final1').classList.remove('winner');
     }
-
     document.getElementById('trophy-emoji').textContent = trophy;
     document.getElementById('winner-text').textContent = winText;
     document.getElementById('winner-sub').textContent = winSub;
   }
-
   function restartGame() {
     document.getElementById('gameover-screen').classList.remove('show');
     scores = [0, 0];
@@ -936,11 +638,31 @@
     document.getElementById('score2').textContent = 0;
     loadQuestion();
   }
-
-  // Allow pressing Enter on name inputs to start
   document.getElementById('name2').addEventListener('keyup', e => {
     if (e.key === 'Enter') startGame();
   });
 </script>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyCaJT0XLWTOSFK8fUXfN3XbXjkd3o5aAB8",
+    authDomain:        "fc-stars---would-you-rather.firebaseapp.com",
+    databaseURL:       "https://fc-stars---would-you-rather-default-rtdb.firebaseio.com",
+    projectId:         "fc-stars---would-you-rather",
+    storageBucket:     "fc-stars---would-you-rather.firebasestorage.app",
+    messagingSenderId: "192533566492",
+    appId:             "1:192533566492:web:cc16f62175b50fd77abbd9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
+  window._firebaseDb = db;
+  console.log("Firebase connected!");
+</script>
+
 </body>
 </html>
